@@ -5,8 +5,9 @@
 <main class="seccion">
 
     <x-header-herramientas class="py-5 titulo"
-        background="background-image: url({{ asset('storage/img/home/home.jpg')}})" title="Configurador de PS COVER"
-        description="Configura y calcula tu cubierta." :user="$user" />
+        background="background-image: url({{ asset('storage/img/home/home.jpg')}})" title="Configurador de Cubiertas LEROY"
+        description="Configura y calcula tu cubierta." :user="$user" logo="{{ asset('img/brand/leroy_merlin.jpg') }}"
+        logoAlt="Leroy Merlin" />
 
     <link rel="stylesheet" type="text/css" href="{{ asset('config/lib/css/configurador.css') }}" />
     <script src="{{ asset('config/lib/js/jquery.min.js') }}"></script>
@@ -15,6 +16,7 @@
 
     <div class="container max-w-screen-lg mx-auto mb-4 w-12/12 contenido">
         <div class="px-4 caja">
+
             <div id="errormail" class="enespera" style="z-index: 1002;">
                 <div class="error"><img src="img/checkko.png" align="absmiddle"><br>
                     <div id="errortxt"></div>
@@ -54,6 +56,18 @@
             </form>
 
             <div class="salto" style="height: 30px;"></div>
+
+            <section id="pscover-stepper" class="pscover-stepper" aria-label="Progreso del configurador">
+                <div class="pscover-stepper-head">
+                    <span id="pscover-step-text">Paso 1</span>
+                </div>
+                <div class="pscover-stepper-track-wrap">
+                    <div class="pscover-stepper-track"></div>
+                    <div id="pscover-stepper-progress" class="pscover-stepper-progress"></div>
+                    <div id="pscover-stepper-cursor" class="pscover-stepper-cursor" aria-hidden="true"></div>
+                    <ol id="pscover-stepper-list" class="pscover-stepper-list"></ol>
+                </div>
+            </section>
 
             <div id="configurador">
 
@@ -123,87 +137,213 @@
 
 
             </div>
-            {{-- @if(isset($user))
-            <script>
-                console.log('{{ $user }}');
-            </script>
-            @endif --}}
-            <div class="salto" style="height: 30px"></div>
-            <x-boton-volver :user="$user" />
-            <div class="salto" style="height: 40px"></div>
-
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const stepDefs = [{
+                    id: 'cubierta',
+                    label: 'Cubierta'
+                },
+                {
+                    id: 'piscina',
+                    label: 'Piscina'
+                },
+                {
+                    id: 'escalera',
+                    label: 'Escalera'
+                },
+                {
+                    id: 'lamina',
+                    label: 'Lámina'
+                },
+                {
+                    id: 'instalacion',
+                    label: 'Instalación'
+                },
+                {
+                    id: 'preciopvp',
+                    label: 'Precio PVP'
+                },
+                {
+                    id: 'cod_cliente',
+                    label: 'Código'
+                },
+                {
+                    id: 'precio',
+                    label: 'Precio Neto'
+                },
+                {
+                    id: 'precioneto',
+                    label: 'Precio Neto'
+                },
+                {
+                    id: 'cliente0',
+                    label: 'Cliente'
+                },
+                {
+                    id: 'imprimirdiv',
+                    label: 'Imprimir'
+                },
+                {
+                    id: 'final',
+                    label: 'Final'
+                }
+            ];
+
+            const configurador = document.getElementById('configurador');
+            const list = document.getElementById('pscover-stepper-list');
+            const progress = document.getElementById('pscover-stepper-progress');
+            const cursor = document.getElementById('pscover-stepper-cursor');
+            const stepText = document.getElementById('pscover-step-text');
+
+            if (!configurador || !list || !progress || !cursor || !stepText) return;
+
+            const steps = stepDefs.filter((step) => document.getElementById(step.id));
+            const screens = steps.map((step) => document.getElementById(step.id));
+            if (!steps.length) return;
+
+            screens.forEach((screen) => screen.classList.add('ps-step-screen'));
+
+            list.innerHTML = steps.map((step, index) => `
+                <li class="pscover-step-item" data-step-index="${index}" data-step-target="${step.id}">
+                    <span class="pscover-step-dot">${index + 1}</span>
+                    <span class="pscover-step-label">${step.label}</span>
+                </li>
+            `).join('');
+
+            const items = Array.from(list.querySelectorAll('.pscover-step-item'));
+            let currentIndex = 0;
+
+            function getVisibleStepIndex() {
+                for (let i = 0; i < screens.length; i++) {
+                    const el = screens[i];
+                    if (!el) continue;
+                    const style = window.getComputedStyle(el);
+                    if (style.display !== 'none' && style.visibility !== 'hidden') return i;
+                }
+                return currentIndex;
+            }
+
+            function renderStep(index) {
+                currentIndex = Math.max(0, Math.min(index, steps.length - 1));
+
+                const ratio = steps.length > 1 ? currentIndex / (steps.length - 1) : 0;
+                stepText.textContent = `Paso ${currentIndex + 1} de ${steps.length}: ${steps[currentIndex].label}`;
+
+                items.forEach((item, i) => {
+                    item.classList.toggle('is-active', i === currentIndex);
+                    item.classList.toggle('is-complete', i < currentIndex);
+                });
+
+                screens.forEach((screen, i) => {
+                    screen.classList.toggle('is-visible-step', i === currentIndex);
+                });
+
+                const getCenter = (idx) => {
+                    const dot = items[idx] && items[idx].querySelector('.pscover-step-dot');
+                    if (!dot) return null;
+                    const listRect = list.getBoundingClientRect();
+                    const dotRect = dot.getBoundingClientRect();
+                    return (dotRect.left - listRect.left) + (dotRect.width / 2);
+                };
+
+                const firstCenter = getCenter(0);
+                const lastCenter = getCenter(items.length - 1);
+                const currentCenter = getCenter(currentIndex);
+
+                if (firstCenter !== null && lastCenter !== null && currentCenter !== null) {
+                    const trackStart = 12;
+                    const clampedCenter = Math.max(trackStart, currentCenter);
+                    cursor.style.left = `${clampedCenter - 11}px`;
+                    progress.style.width = `${Math.max(0, clampedCenter - trackStart)}px`;
+                } else {
+                    const percent = ratio * 100;
+                    progress.style.width = percent + '%';
+                    cursor.style.left = `calc(${percent}% - 11px)`;
+                }
+            }
+
+            function syncStep() {
+                renderStep(getVisibleStepIndex());
+            }
+
+            const observer = new MutationObserver(() => {
+                window.requestAnimationFrame(syncStep);
+            });
+
+            observer.observe(configurador, {
+                attributes: true,
+                subtree: true,
+                attributeFilter: ['style', 'class']
+            });
+
+            configurador.addEventListener('click', function(event) {
+                if (event.target.closest('button')) {
+                    setTimeout(syncStep, 40);
+                }
+            });
+
+            window.addEventListener('resize', syncStep);
+            syncStep();
+        });
+    </script>
 </main>
 
 @endsection
 
 <style>
-    .flex {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
+    body {
+        background: linear-gradient(165deg, #f3f5f1 0%, #ffffff 70%);
     }
 
-    /* Responsive styles */
-    @media screen and (max-width: 1268px) {
-        .boton-s {
-            width: 100%;
-            margin-top: 10px;
+    .seccion {
+        padding: 1.2rem 0.75rem;
+    }
+
+    .contenido {
+        background: #ffffff;
+        border: 1px solid #d9e1cf;
+        border-radius: 16px;
+        box-shadow: 0 16px 40px rgba(46, 58, 46, 0.1);
+        padding: 1.1rem;
+        margin-top: 1rem;
+    }
+
+    .caja {
+        border-radius: 14px;
+        border: 1px solid #e3ebd9;
+        background: #f7f9f4;
+        padding: 1rem;
+    }
+
+    .cabhome .header-logo-side {
+        width: 56px;
+        height: 56px;
+        padding: 4px;
+        border-radius: 8px;
+    }
+
+    #configurador > div {
+        margin-bottom: 0;
+    }
+
+    @media (max-width: 768px) {
+        .contenido {
+            padding: 0.8rem;
         }
 
-        #delta {
-            flex-direction: column;
-            gap: 10px;
+        .caja {
+            padding: 0.75rem;
         }
 
-        .switch {
-            transform: scale(0.8);
-            align-items: center;
-        }
-
-        .nombrecheck {
-            font-size: 14px !important;
-            text-align: left !important;
-        }
-
-        .titulo-modelo {
-            text-align: left;
-        }
-
-        .flex {
-            display: inline-block;
-        }
-
-        #presupuesto,
-        #presupuestoPVP,
-        .mostrar_neto {
-            font-size: 20px !important;
-            float: inherit !important;
-            padding: 0px !important;
-            text-align: center;
-            margin-top: 5px;
-
-        }
-
-        #dibuimprimir,
-        #dibuinstalacion,
-        #dibuprecio,
-        #calculadora {
-            display: none;
-        }
-
-
-        .formtemp {
-            float: inherit !important;
-            width: 100% !important;
-            padding: 40px !important;
-
-        }
-
-        #btnimprimirA {
-            width: 100%;
+        .cabhome .header-logo-side {
+            width: 44px;
+            height: 44px;
+            padding: 3px;
         }
     }
 </style>
+
+

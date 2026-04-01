@@ -26,8 +26,14 @@ $(document).ready(function () {
                     $("#btnprecioS").prop('disabled', false);
                     $('#mostrarprecio').show();
                     $('#error').hide();
-                    PRECIO = Intl.NumberFormat('de-DE').format(parseFloat(response.PRECIO).toFixed(2));
-                    $('#presupuesto').html(PRECIO + " €");
+                    const precioNumerico = parseFloat(String(response.PRECIO).replace(",", "."));
+                    const PRECIO = Number.isNaN(precioNumerico)
+                        ? response.PRECIO
+                        : Intl.NumberFormat('de-DE', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }).format(precioNumerico);
+                    $('#presupuesto, #presupuestoPVP').html(PRECIO + " �");
 
                 } else if (response.OK == 0) {
 
@@ -533,8 +539,14 @@ $(document).ready(function () {
     });
 
     $("#btnprecioPVPS").click(function () {
-        $("#cod_cliente").show();
         $("#preciopvp").hide();
+        if ($("#cod_cliente").length) {
+            $("#cod_cliente").show();
+        } else if ($("#precioneto").length) {
+            $("#precioneto").show();
+        } else {
+            $("#cliente0").show();
+        }
     });
 
 
@@ -559,7 +571,13 @@ $(document).ready(function () {
         //enviar();
 
         $("#instalacion").hide();
-        $("#precio").show();
+        if ($("#precio").length) {
+            $("#precio").show();
+        } else if ($("#precioneto").length) {
+            $("#precioneto").show();
+        } else {
+            $("#cliente0").show();
+        }
         $('#error').hide();
 
     });
@@ -578,6 +596,18 @@ $(document).ready(function () {
     $("#btnprecioS").click(function () {
         $("#cod_cliente").hide();
         $("#precio").hide(); $("#cliente0").show();
+    });
+
+    /*********** PRECIO NETO *************/
+
+    $("#btnprecioNETOA").click(function () {
+        $("#precioneto").hide();
+        $("#preciopvp").show();
+    });
+
+    $("#btnprecioNETOS").click(function () {
+        $("#precioneto").hide();
+        $("#cliente0").show();
     });
 
     /*********** CLIENTE *************/
@@ -607,7 +637,12 @@ $(document).ready(function () {
     // Botones atrás / siguiente
     $("#btnclienteA").click(function () {
 
-        $("#cliente0").hide(); $("#precio").show();
+        $("#cliente0").hide();
+        if ($("#precioneto").length) {
+            $("#precioneto").show();
+        } else {
+            $("#precio").show();
+        }
 
     });
     $("#btnclienteS").click(function () {
@@ -666,5 +701,6 @@ $(document).ready(function () {
 
     });
 });
+
 
 

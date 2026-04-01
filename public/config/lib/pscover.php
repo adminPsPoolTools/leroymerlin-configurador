@@ -27,25 +27,25 @@ $cif_sin_web = null;
 switch ($tipo) {
     case 1: // Calcula el presupuesto PVP
 
-        //$cliente = '14071';
-        $endpoint = "https://webservices.ps-pool.com/WebServices/obtener_cliente_configurador.php?cliente=" . $cliente;
-        $response = file_get_contents($endpoint);
+        $codigo_cliente = '14978';
+        // $endpoint = "https://webservices.ps-pool.com/WebServices/obtener_cliente_configurador.php?cliente=" . $cliente;
+        // $response = file_get_contents($endpoint);
 
-        if ($response !== false) {
-            // LIMPIA el BOM si lo hay
-            $response = preg_replace('/^\xEF\xBB\xBF/', '', $response);
-            $data = json_decode($response, true);
+        // if ($response !== false) {
+        //     // LIMPIA el BOM si lo hay
+        //     $response = preg_replace('/^\xEF\xBB\xBF/', '', $response);
+        //     $data = json_decode($response, true);
 
-            if (isset($data['codigo_padre'])) {
-                $codigo_padre = $data['codigo_padre'];
-                $codigo_cliente =  $codigo_padre;
-            } else {
-                echo "No se encontró 'codigo_padre' en la respuesta.";
-                var_dump($data); // Para depurar
-            }
-        } else {
-            echo "Error al obtener datos del endpoint.";
-        }
+        //     if (isset($data['codigo_padre'])) {
+        //         $codigo_padre = $data['codigo_padre'];
+        //         $codigo_cliente =  $codigo_padre;
+        //     } else {
+        //         echo "No se encontró 'codigo_padre' en la respuesta.";
+        //         var_dump($data); // Para depurar
+        //     }
+        // } else {
+        //     echo "Error al obtener datos del endpoint.";
+        // }
 
         // $sql = "SELECT CIF FROM CLIENTES WHERE CODIGO = '" . $cliente . "'";
         // $result = mysqli_query($conn, $sql);

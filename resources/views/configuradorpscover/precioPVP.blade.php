@@ -31,27 +31,3 @@
         </div>
     </div>
 </div>
-
-
-<script>
-    document.getElementById('toggleButton').addEventListener('click', function() {
-                var presupuestoDiv = document.getElementById('presupuesto');
-                if (presupuestoDiv.classList.contains('hidden')) {
-                    presupuestoDiv.classList.remove('hidden');
-                    this.textContent = 'Ocultar';
-                } else {
-                    presupuestoDiv.classList.add('hidden');
-                    this.textContent = 'Mostrar';
-                }
-            });
-</script>
-
-<style>
-    .mostrar_neto {
-        font-size: 35px;
-    }
-
-    .hidden {
-        display: none;
-    }
-</style>

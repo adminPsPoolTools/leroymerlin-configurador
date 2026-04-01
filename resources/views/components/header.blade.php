@@ -1,4 +1,4 @@
-@props(['user'])
+@props(['user', 'logo' => null, 'logoAlt' => ''])
 
 @php
 $userEncoded = base64_encode($user);
@@ -8,35 +8,18 @@ $userEncoded = base64_encode($user);
     <div class="row">
         <div class="col container-wrapper">
             <div class="container_titulo">
-                <div class="texto">
-                    <h1>{{ $title }}</h1>
-                    <p>{{ $description }}</p>
-                    <div class="flecha"><img src="{{ asset('storage/img/flecha.png')}}"></div>
+                <div class="header-content">
+                    <div class="texto">
+                        <h1>{{ $title }}</h1>
+                        <p>{{ $description }}</p>
+                        {{-- <div class="flecha"><img src="{{ asset('storage/img/flecha.png')}}"></div> --}}
+                    </div>
+                    @if($logo)
+                    <div class="header-logo-side">
+                        <img src="{{ $logo }}" alt="{{ $logoAlt ?: 'Logo' }}">
+                    </div>
+                    @endif
                 </div>
-            </div>
-            <div class="container_menu">
-                <nav class="menu">
-                    <ul class="mb-0 d-flex list-unstyled">
-                        <li class="mx-2">
-                            <a href="{{ route('home', ['token' => 'l31ucJISzo6nI4s7y7wpict2EsDtPONc8HeiIXFYHiu59S8ErUUSl9K7pxdjW1Fs', 'user' => $userEncoded ]) }}"
-                                class="{{ Route::is('home') ? 'active' : '' }}">
-                                Herramientas
-                            </a>
-                        </li>
-                        <li class="mx-2">
-                            <a href="{{ route('guias.index', ['token' => 'l31ucJISzo6nI4s7y7wpict2EsDtPONc8HeiIXFYHiu59S8ErUUSl9K7pxdjW1Fs', 'user' => $userEncoded ]) }}"
-                                class="{{ Route::is('guias.index') ? 'active' : '' }}">
-                                Guías rápidas
-                            </a>
-                        </li>
-                        <li class="mx-2">
-                            <a href="{{ route('tips.index', ['token' => 'l31ucJISzo6nI4s7y7wpict2EsDtPONc8HeiIXFYHiu59S8ErUUSl9K7pxdjW1Fs', 'user' => $userEncoded ]) }}"
-                                class="{{ Route::is('tips.index') ? 'active' : '' }}">
-                                Tips
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
             </div>
         </div>
     </div>
@@ -76,6 +59,32 @@ $userEncoded = base64_encode($user);
         margin-top: 1.5rem;
     }
 
+    .header-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    .header-logo-side {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: 164px;
+        height: 164px;
+        padding: 5px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.16);
+    }
+
+    .header-logo-side img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
     /* Responsive styles */
     @media screen and (max-width: 1268px) {
         .container-wrapper {
@@ -99,6 +108,17 @@ $userEncoded = base64_encode($user);
             text-align: left;
             font-size: 40px !important;
 
+        }
+
+        .header-content {
+            width: 100%;
+            gap: 0.75rem;
+        }
+
+        .header-logo-side {
+            width: 52px;
+            height: 52px;
+            padding: 4px;
         }
 
         .menu ul {
@@ -146,6 +166,20 @@ $userEncoded = base64_encode($user);
             text-align: left;
             font-size: 40px !important;
 
+        }
+
+        .header-content {
+            width: 100%;
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 0.65rem;
+        }
+
+        .header-logo-side {
+            width: 44px;
+            height: 44px;
+            padding: 3px;
+            border-radius: 8px;
         }
 
         .menu ul {

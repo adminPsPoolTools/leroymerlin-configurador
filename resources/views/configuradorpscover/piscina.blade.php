@@ -39,8 +39,8 @@
 
         <div class="salto" style="height: 20px;"></div>
 
-        <div class="wxh">Largo (cm)<br><span class="peque">(2000 cm Max)</span></div>
-        <div class="dato"><input type="number" name="piscina_h" id="piscina_h" value="800" max="2000"><span
+        <div class="wxh">Largo (cm)<br><span class="peque">(15000 cm Max)</span></div>
+        <div class="dato"><input type="number" name="piscina_h" id="piscina_h" value="800" max="15000"><span
                 id="errorPisH" class="ocultar errorcampo">El largo sobrepasa el
                 límite</span></div>
 

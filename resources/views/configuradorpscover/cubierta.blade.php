@@ -7,7 +7,7 @@
         <h2><img src="../../../config/img/icono-piscina.png"><br>Tipo de la cubierta</h2>
         <div class="salto" style="height: 30px;"></div>
 
-        <button name="tipo" id="tipocubierta1" class="boton-s" value="S">Sumergida</button>
+        {{-- <button name="tipo" id="tipocubierta1" class="boton-s" value="S">Sumergida</button> --}}
         <button name="tipo" id="tipocubierta2" class="boton-s" value="C">Coronación</button>
 
         <div class="salto" style="height: 30px;"></div>
@@ -48,30 +48,6 @@
 
         <div id="altea" class="ocultar">
             <div class="mb-2 border-bottom titulo-modelo">Modelo</div>
-
-            <div class="flex">
-                <div class="mr-2 nombrecheck">Terra</div>
-                <label class="switch">
-                    <input type="radio" class="deltaltea" name="deltaltea" id="altea0" value="terra">
-                    <div class="slider round"></div>
-                </label>
-            </div>
-
-            <div class="flex">
-                <div class="mr-2 nombrecheck">Terra Lite</div>
-                <label class="switch">
-                    <input type="radio" class="deltaltea" name="deltaltea" id="terra_lite" value="terra_lite">
-                    <div class="slider round"></div>
-                </label>
-            </div>
-
-            <div class="flex">
-                <div class="mr-2 nombrecheck">Terra Slim</div>
-                <label class="switch">
-                    <input type="radio" class="deltaltea" name="deltaltea" id="terra_slim" value="terra_slim">
-                    <div class="slider round"></div>
-                </label>
-            </div>
 
             <div class="flex">
                 <div class="mr-2 nombrecheck">Terra Solar</div>

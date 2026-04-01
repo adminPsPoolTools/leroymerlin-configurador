@@ -1,6 +1,7 @@
-@props(['user'])
+@props(['user', 'logo' => null, 'logoAlt' => ''])
 
-<x-header title="{{ $title }}" description="{{ $description }}" background="{{ $background }}" :user="$user" />
+<x-header title="{{ $title }}" description="{{ $description }}" background="{{ $background }}" :user="$user"
+    :logo="$logo" :logoAlt="$logoAlt" />
 
 <style>
     /* General styles */
