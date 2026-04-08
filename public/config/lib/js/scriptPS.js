@@ -33,7 +33,7 @@ $(document).ready(function () {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2
                         }).format(precioNumerico);
-                    $('#presupuesto, #presupuestoPVP').html(PRECIO + " �");
+                    $('#presupuesto, #presupuestoPVP').html(PRECIO + " &euro;");
 
                 } else if (response.OK == 0) {
 
@@ -48,7 +48,15 @@ $(document).ready(function () {
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                alert("Hubo un problema al calcular el precio, y si el problema persiste contacte con nosotros");
+                const detalleServidor = (jqXHR.responseText || "").toString().trim();
+                const detalle = detalleServidor.length
+                    ? detalleServidor.substring(0, 350)
+                    : (errorThrown || textStatus || "Error desconocido");
+
+                $("#btnprecioS").prop('disabled', true);
+                $('#error').show();
+                $('#mostrarprecio').hide();
+                $('#error #errortxt').html(detalle);
                 $('#enviando').fadeOut('slow');
                 console.error("Detalles del error:");
                 console.error("Status HTTP:", jqXHR.status);
@@ -60,6 +68,7 @@ $(document).ready(function () {
     };
 
     $("#imprimir").click(function () {
+        sincronizarDatosClienteParaImpresion();
         $("#presu").val($("#codpresupuesto").val());
         $.ajax({
             url: url,
@@ -97,48 +106,15 @@ $(document).ready(function () {
         });
     });
 
-    // $("#enviaremail").click(function() {
-    // 	$("#presuemail").val( $("#codpresupuesto").val() );
-    // 	$("#clienteemail").val( $("#CLIENTE").val() );
-
-    // 	$.ajax({
-    //         url: "{{ asset('config/lib/enviar_correo.php') }}",
-    // 		//url: "https://zbaquanatur.ps-cover.com/lib/enviar_correo.php",
-    // 		type: "POST",
-    // 		data: $("#formemail").serialize(),
-    // 		mimeType: "multipart/form-data",
-    // 		dataType: "json",
-    // 		cache:false, //Para que el formulario no guarde cache
-    // 		success: function(response) {
-
-    //             $('#enviando').fadeOut('slow');
-    // 			if (response.OK == 1){
-    // 				$('#correcto .correcto').html("Email enviado"); $('#correcto').fadeIn('slow'); setTimeout("$('#correcto').fadeOut('slow');", 4000);
-    // 				$('#btnFin').hide();
-    // 				$('#btnvolverFin').show();
-    // 			} else if (response.OK == 0){
-    // 				$('#errormail .error').html("<b>Ha habido un error. </b><br>No se ha podido enviar"); $('#errormail').fadeIn('slow'); setTimeout("$('#errormail').fadeOut('slow');", 4000);
-    // 				console.log("Response error: " + response.ERROR);
-    // 			} else {
-    // 				alert ("Sin respuesta");
-    // 			}
-    // 		},
-    // 		error: function(request, status, error) {
-
-    // 			console.log(request);
-    // 			console.log("Status: " + status);
-    // 			console.log("Error: " + error);
-    // 			alert ("Ha habido un problema en el archivo");
-    // 			$('#enviando').fadeOut('slow');
-    // 		}
-    // 	});
-    // });
-
-    $("#btnvolverFin").click(function () {
+    function volverAlInicio() {
+        $("#piscina, #escalera, #lamina, #instalacion, #preciopvp, #cod_cliente, #precio, #precioneto, #cliente0, #imprimirdiv, #final").hide();
         $("#cubierta").show();
-        $("#final").hide();
-    });
+    }
 
+    $("#btnvolverFin, #inicio").click(function (e) {
+        e.preventDefault();
+        volverAlInicio();
+    });
 
     /*********** CUBIERTA *************/
 
@@ -232,7 +208,7 @@ $(document).ready(function () {
 
     $("#acabadocubierta1").on('change', function () {
         if ($(this).is(":checked")) {
-            // Si acabadocubierta1 está marcado
+            // Si acabadocubierta1 estÃƒÆ’Ã‚Â¡ marcado
             $("#acabadocubierta2").prop('checked', false);
             $("#ipe_revestir").hide();
             $("input[name='acabadoTapa']").prop('checked', false);
@@ -246,7 +222,7 @@ $(document).ready(function () {
 
     $("#acabadocubierta2").on('change', function () {
         if ($(this).is(":checked")) {
-            // Si acabadocubierta2 está marcado
+            // Si acabadocubierta2 estÃƒÆ’Ã‚Â¡ marcado
             $("#acabadocubierta1").prop('checked', true);
             $("#ipe_revestir").show();
             $("input[name='acabadoTapa']:first").prop('checked', true);
@@ -257,7 +233,7 @@ $(document).ready(function () {
         }
     });
 
-    // Botones atrás / siguiente
+    // Botones atrÃƒÆ’Ã‚Â¡s / siguiente
     $("#btncubiertaS").click(function () {
 
         $("#deltaltea").val($("input[name='deltaltea']:checked").val());
@@ -270,7 +246,7 @@ $(document).ready(function () {
 
     /*********** PISCINA *************/
 
-    // Botones atrás / siguiente
+    // Botones atrÃƒÆ’Ã‚Â¡s / siguiente
     $("#btnpiscinaA").click(function () {
         $("#piscina").hide();
         $("#cubierta").show();
@@ -302,8 +278,10 @@ $(document).ready(function () {
 
     $("#posescaleraD").click(function () {
         $("#posicionEscalera").val("D");
-        $("#dibuescalera, #escaleraFC").hide();
+        $("#dibuescalera, #escaleraF").hide();
         $("#escaleraD").show();
+        $("#escalera").addClass("escalera-no");
+        $("#escalera .ps-input-col").hide();
         $(".lugarescalera").removeClass("activo");
         $(this).addClass("activo");
         $("#btnescaleraS").prop('disabled', false);
@@ -312,8 +290,10 @@ $(document).ready(function () {
 
     $("#posescaleraF").click(function () {
         $("#posicionEscalera").val("F");
+        $("#escalera").removeClass("escalera-no");
         $("#dibuescalera, #escaleraD").hide();
         $("#escaleraF").show();
+        $("#escalera .ps-input-col").show();
         $("#posicion1, #posicion2").hide();
         $("#enrollador").show();
         $(".lugarescalera").removeClass("activo");
@@ -366,7 +346,7 @@ $(document).ready(function () {
         darpasoesc();
     });
 
-    // Botones atrás / siguiente
+    // Botones atrÃƒÆ’Ã‚Â¡s / siguiente
     $("#btnescaleraA").click(function () {
         $("#escalera").hide();
         $("#piscina").show();
@@ -411,22 +391,23 @@ $(document).ready(function () {
         }
     }
 
-    /*********** LÁMINAS *************/
+    /*********** LÃƒÆ’Ã‚ÂMINAS *************/
 
     $("#btnlaminaS").prop('disabled', true);
 
     $("#matlamina1").click(function () {
-        $("#dibulamina").html("<img src=\"../../../config/img/laminas/policarbonato.jpg\" width=\"100%\">");
-        $("#divpvc").hide();
-        $("#divpc").show();
+        $("#dibulamina").html("<img class=\"lamina-preview-img\" src=\"../../../config/img/laminas/policarbonato.jpg\" width=\"100%\">");
+        $("#divpvc").css("display", "none");
+        $("#divpc").css("display", "grid");
         $(".matlamina").removeClass("activo");
         $(this).addClass("activo");
         $("#tipoLamina").val($(this).attr("value"));
     });
 
     $("#matlamina2").click(function () {
-        $("#dibulamina").html("<img src=\"../../../config/img/laminas/pvc.jpg\" width=\"100%\">");
-        $("#divpc").hide(); $("#divpvc").show();
+        $("#dibulamina").html("<img class=\"lamina-preview-img\" src=\"../../../config/img/laminas/pvc.jpg\" width=\"100%\">");
+        $("#divpc").css("display", "none");
+        $("#divpvc").css("display", "grid");
         $(".matlamina").removeClass("activo"); $(this).addClass("activo");
         $("#tipoLamina").val($(this).attr("value"));
 
@@ -437,10 +418,15 @@ $(document).ready(function () {
         $(".collamina").removeClass("activo");
         $(this).addClass("activo");
         $("#colorLamina").val($(this).attr("value"));
+
+        var colorImg = $(this).find("img").attr("src");
+        if (colorImg) {
+            $("#dibulamina").html("<img class=\"lamina-preview-img\" src=\"" + colorImg + "\" width=\"100%\">");
+        }
     });
 
 
-    // Botones atrás / siguiente
+    // Botones atrÃƒÆ’Ã‚Â¡s / siguiente
     $("#btnlaminaA").click(function () {
         $("#lamina").hide(); $("#escalera").show();
     });
@@ -498,9 +484,9 @@ $(document).ready(function () {
         let codSeguridadLleno = $("#codseguridadV").val().length > 2;
 
         if (codClienteLleno && codSeguridadLleno) {
-            $("#btncodigoclienteS").prop("disabled", false); // Habilita el botón
+            $("#btncodigoclienteS").prop("disabled", false); // Habilita el botÃƒÆ’Ã‚Â³n
         } else {
-            $("#btncodigoclienteS").prop("disabled", true); // Deshabilita el botón
+            $("#btncodigoclienteS").prop("disabled", true); // Deshabilita el botÃƒÆ’Ã‚Â³n
         }
     }
     function cinstaP() {
@@ -512,7 +498,7 @@ $(document).ready(function () {
         }
     }
 
-    // Botones atrás / siguiente
+    // Botones atrÃƒÆ’Ã‚Â¡s / siguiente
     $("#btninstalacionA").click(function () {
         $("#instalacion").hide();
         $("#lamina").show();
@@ -532,7 +518,7 @@ $(document).ready(function () {
     /*********** PRECIO PVP *************/
 
 
-    // Botones atrás / siguiente
+    // Botones atrÃƒÆ’Ã‚Â¡s / siguiente
     $("#btnprecioPVPA").click(function () {
         $("#instalacion").show();
         $("#preciopvp").hide();
@@ -540,13 +526,7 @@ $(document).ready(function () {
 
     $("#btnprecioPVPS").click(function () {
         $("#preciopvp").hide();
-        if ($("#cod_cliente").length) {
-            $("#cod_cliente").show();
-        } else if ($("#precioneto").length) {
-            $("#precioneto").show();
-        } else {
-            $("#cliente0").show();
-        }
+        $("#cliente0").show();
     });
 
 
@@ -571,13 +551,7 @@ $(document).ready(function () {
         //enviar();
 
         $("#instalacion").hide();
-        if ($("#precio").length) {
-            $("#precio").show();
-        } else if ($("#precioneto").length) {
-            $("#precioneto").show();
-        } else {
-            $("#cliente0").show();
-        }
+        $("#cliente0").show();
         $('#error').hide();
 
     });
@@ -586,7 +560,7 @@ $(document).ready(function () {
 
     $("#btnprecioS").prop('disabled', true);
 
-    // Botones atrás / siguiente
+    // Botones atrÃƒÆ’Ã‚Â¡s / siguiente
     $("#btnprecioA").click(function () {
 
         $("#precio").hide();
@@ -612,7 +586,7 @@ $(document).ready(function () {
 
     /*********** CLIENTE *************/
 
-    $("#btnclienteS").prop('disabled', true);
+    $("#imprimir").prop('disabled', true);
 
     crazonsocial = cnombre = ccif = cpassword = cpassword2 = ctelefonofijo = ctelefonomovil = cemail = 0;
 
@@ -626,50 +600,37 @@ $(document).ready(function () {
 
         if (cnombre == 1) { $("#comp-nombre img").css('visibility', 'visible'); } else { $("#comp-nombre img").css('visibility', 'hidden'); }
         if (cnombre == 1) {
-            $("#btnclienteS").prop('disabled', false);
-            //$("#TIPO").val( 2 );
+            $("#imprimir").prop('disabled', false);
         } else {
-            $("#btnclienteS").prop('disabled', true);
+            $("#imprimir").prop('disabled', true);
         }
 
     }
 
-    // Botones atrás / siguiente
+    // Botones atrÃƒÆ’Ã‚Â¡s / siguiente
     $("#btnclienteA").click(function () {
 
         $("#cliente0").hide();
-        if ($("#precioneto").length) {
-            $("#precioneto").show();
-        } else {
-            $("#precio").show();
-        }
+        $("#preciopvp").show();
 
     });
-    $("#btnclienteS").click(function () {
+    function sincronizarDatosClienteParaImpresion() {
         let datosclientehtml = `
                 <table style="border-collapse: collapse; width: 100%;">
                     <tr><td><b>Nombre:</b></td><td>${escapeHtml($("#nombre").val())}</td></tr>
                     <tr><td><b>Email:</b></td><td>${escapeHtml($("#email").val())}</td></tr>
-                    <tr><td><b>Dirección:</b></td><td>${escapeHtml($("#direccion").val())}</td></tr>
-                    <tr><td><b>Población:</b></td><td>${escapeHtml($("#poblacion").val())}</td></tr>
-                    <tr><td><b>Teléfono:</b></td><td>${escapeHtml($("#telefono").val())}</td></tr>
+                    <tr><td><b>Direccion:</b></td><td>${escapeHtml($("#direccion").val())}</td></tr>
+                    <tr><td><b>Poblacion:</b></td><td>${escapeHtml($("#poblacion").val())}</td></tr>
+                    <tr><td><b>Telefono:</b></td><td>${escapeHtml($("#telefono").val())}</td></tr>
                     <tr><td><b>Provincia:</b></td><td>${escapeHtml($("#provincia").val())}</td></tr>
                     <tr><td><b>CP:</b></td><td>${escapeHtml($("#cp").val())}</td></tr>
-                    <tr><td><b>País:</b></td><td>${escapeHtml($("#pais").val())}</td></tr>
+                    <tr><td><b>Pais:</b></td><td>${escapeHtml($("#pais").val())}</td></tr>
                 </table>`;
 
-        // Pasar la tabla a los inputs ocultos
         $("#datoscliente").val(datosclientehtml);
         $("#datosprint").val(datosclientehtml);
-
-        // Ocultar y mostrar elementos
-        $("#cliente0").hide();
-        $("#imprimirdiv").show();
-
-
-    });
-
-    // Función para evitar problemas con caracteres especiales
+    }
+    // FunciÃƒÆ’Ã‚Â³n para evitar problemas con caracteres especiales
     function escapeHtml(text) {
         return text.replace(/&/g, "&amp;")
             .replace(/</g, "&lt;")
@@ -677,30 +638,7 @@ $(document).ready(function () {
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#039;");
     }
-
-    /*********** IMPRIMIR *************/
-
-    $("#btnimprimirS").prop('disabled', false);
-
-    // Botones atrás / siguiente
-    $("#btnimprimirA").click(function () {
-        $("#imprimirdiv").hide(); $("#cliente0").show();
-
     });
-    $("#btnimprimirS").click(function () {
-        $("#TIPO").val(4);
-        $("#imprimirdiv").hide(); $("#final").show();
-
-    });
-
-    /*********** FINAL *************/
-    // Botones atrás / siguiente
-    $("#btnfinalizarA").click(function () {
-
-        $("#final").hide(); $("#imprimirdiv").show();
-
-    });
-});
 
 
 

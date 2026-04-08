@@ -1,8 +1,8 @@
 <div id="precioneto">
-    <div class="dibujo">
+    <div class="dibujo pscover-media relative bg-lime-50">
         <div id="dibuprecio"><img src="../../../config/img/precio.jpg" width="100%"></div>
     </div>
-    <div class="formtemp">
+    <div class="formtemp pscover-form flex flex-col">
         <div id="mostrarprecio_neto">
             <h2><img src="../../../config/img/icono-piscina.png"><br>P.N.C</h2>
             <div id="presupuesto" class="hidden"></div>
@@ -17,7 +17,7 @@
         <div class="peque" id="atencion" style="display: none;">¡Atención! Precio neto según condiciones acordadas <p
                 id="toggleButton" class="peque" style="cursor: pointer; text-decoration: underline;">Mostrar precio</p>
         </div>
-        <div class="botones">
+        <div class="botones pscover-actions flex items-center gap-3">
             <div class="divsiguiente"><button id="btnprecioNETOS" class="btnsiguiente">Siguiente <img
                         src="../../../config/img/flecha-s.png" align="absmiddle"></button></div>
             <div class="divanterior"><button id="btnprecioNETOA" class="btnanterior"><img
@@ -48,3 +48,4 @@
         display: none;
     }
 </style>
+

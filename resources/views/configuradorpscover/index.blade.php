@@ -9,9 +9,10 @@
         description="Configura y calcula tu cubierta." :user="$user" logo="{{ asset('img/brand/leroy_merlin.jpg') }}"
         logoAlt="Leroy Merlin" />
 
-    <link rel="stylesheet" type="text/css" href="{{ asset('config/lib/css/configurador.css') }}" />
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('config/lib/css/configurador.css') }}?v={{ filemtime(public_path('config/lib/css/configurador.css')) }}" />
     <script src="{{ asset('config/lib/js/jquery.min.js') }}"></script>
-    <script src="{{ asset('config/lib/js/scriptPS.JS') }}"></script>
+    <script src="{{ asset('config/lib/js/scriptPS.js') }}"></script>
     <script type="text/javascript" src="{{ asset('config/lib/html2pdf-master/dist/html2pdf.bundle.min.js') }}"></script>
 
     <div class="container max-w-screen-lg mx-auto mb-4 w-12/12 contenido">
@@ -23,7 +24,7 @@
                 </div>
             </div>
             <div id="correcto" class="enespera" style="z-index: 1002;">
-                <div class="correcto"><img src="img/checkok.png" align="absmiddle"><br>La información ha sido enviada
+                <div class="correcto"><img src="img/checkok.png" align="absmiddle"><br>La informaciÃƒÂ³n ha sido enviada
                 </div>
             </div>
 
@@ -38,17 +39,17 @@
                 <input type="hidden" name="LARGOPISCINA" id="largoPiscina"> <!-- Altura de la piscina -->
                 <input type="hidden" name="ANCHOESCALERA" id="anchoEscalera"> <!-- Ancho de la escalera -->
                 <input type="hidden" name="LARGOESCALERA" id="largoEscalera"> <!-- Altura de la escalera -->
-                <input type="hidden" name="TIPOESCALERA" id="posicionEscalera"> <!-- Posición de la escalera [F|D] -->
+                <input type="hidden" name="TIPOESCALERA" id="posicionEscalera"> <!-- PosiciÃƒÂ³n de la escalera [F|D] -->
                 <input type="hidden" name="posescalera" id="posescalera">
                 <input type="hidden" name="SENTIDOESCALERA" id="sentidoEscalera"> <!-- Sentido de la escalera [s|n] -->
                 <input type="hidden" name="ESCALERAROMANA" id="escaleraromana"> <!-- Escalera romana -->
-                <input type="hidden" name="TIPOLAMINA" id="tipoLamina"> <!-- Material lámina -->
-                <input type="hidden" name="COLORLAMINA" id="colorLamina"> <!-- Color lámina -->
+                <input type="hidden" name="TIPOLAMINA" id="tipoLamina"> <!-- Material lÃƒÂ¡mina -->
+                <input type="hidden" name="COLORLAMINA" id="colorLamina"> <!-- Color lÃƒÂ¡mina -->
                 <input type="hidden" name="TIPOINSTALACION" id="tipoInsta"> <!-- Tipo de instalacion -->
                 <input type="hidden" name="PROVINCIA" id="provinciaPrecio"> <!-- Provincia -->
-                <input type="hidden" name="IMPORTEINSTALACION" id="instaprecio"> <!-- Precio de instalación -->
-                <input type="hidden" name="DATOSCLIENTEFINAL" id="datoscliente"> <!-- Precio de instalación -->
-                <input type="hidden" name="DESCRIPCION" id="descripcion"> <!-- Precio de instalación -->
+                <input type="hidden" name="IMPORTEINSTALACION" id="instaprecio"> <!-- Precio de instalaciÃƒÂ³n -->
+                <input type="hidden" name="DATOSCLIENTEFINAL" id="datoscliente"> <!-- Precio de instalaciÃƒÂ³n -->
+                <input type="hidden" name="DESCRIPCION" id="descripcion"> <!-- Precio de instalaciÃƒÂ³n -->
                 <input type="hidden" name="TIPO_TAPA" id="tipoTapa"> <!-- Tipo de tapa -->
                 <input type="hidden" name="TIPO_PISCINA" id="tipoPiscina"> <!-- Tipo de tapa -->
                 <input type="hidden" name="TIPO" id="TIPO"> <!-- tipo para enviar datos: [1|2] -->
@@ -97,7 +98,7 @@
                 @include('configuradorpscover.laminas')
 
                 <!---------------------------------------->
-                <!--            INSTALACIÓN             -->
+                <!--            INSTALACIÃƒâ€œN             -->
                 <!---------------------------------------->
 
                 @include('configuradorpscover.instalacion')
@@ -110,31 +111,11 @@
                 @include('configuradorpscover.precioPVP')
 
                 <!---------------------------------------->
-                <!--            PRECIO PNC              -->
-                <!---------------------------------------->
-
-                @include('configuradorpscover.precioPNC')
-
-
-                <!---------------------------------------->
                 <!--           DATOS CLIENTE            -->
                 <!---------------------------------------->
 
 
                 @include('configuradorpscover.datoscliente')
-
-                <!---------------------------------------->
-                <!--             IMPRIMIR               -->
-                <!---------------------------------------->
-
-                @include('configuradorpscover.imprimir')
-
-                <!---------------------------------------->
-                <!--             FINAL                  -->
-                <!---------------------------------------->
-
-                @include('configuradorpscover.final')
-
 
             </div>
         </div>
@@ -156,39 +137,19 @@
                 },
                 {
                     id: 'lamina',
-                    label: 'Lámina'
+                    label: 'Lamina'
                 },
                 {
                     id: 'instalacion',
-                    label: 'Instalación'
+                    label: 'Instalacion'
                 },
                 {
                     id: 'preciopvp',
                     label: 'Precio PVP'
                 },
                 {
-                    id: 'cod_cliente',
-                    label: 'Código'
-                },
-                {
-                    id: 'precio',
-                    label: 'Precio Neto'
-                },
-                {
-                    id: 'precioneto',
-                    label: 'Precio Neto'
-                },
-                {
                     id: 'cliente0',
                     label: 'Cliente'
-                },
-                {
-                    id: 'imprimirdiv',
-                    label: 'Imprimir'
-                },
-                {
-                    id: 'final',
-                    label: 'Final'
                 }
             ];
 
@@ -238,7 +199,14 @@
                 });
 
                 screens.forEach((screen, i) => {
-                    screen.classList.toggle('is-visible-step', i === currentIndex);
+                    const isCurrent = i === currentIndex;
+                    screen.classList.toggle('is-visible-step', isCurrent);
+
+                    // jQuery .show() deja display:block inline; lo limpiamos en el paso activo
+                    // para que el layout de CSS (flex/grid) se aplique correctamente.
+                    if (isCurrent && screen.style.display && screen.style.display.toLowerCase() !== 'none') {
+                        screen.style.display = '';
+                    }
                 });
 
                 const getCenter = (idx) => {
@@ -345,5 +313,6 @@
         }
     }
 </style>
+
 
 

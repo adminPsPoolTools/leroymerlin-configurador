@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /* error_reporting(E_ALL);
 ini_set('display_errors', 1); */
@@ -18,9 +18,29 @@ include 'include/imprimirPdf.php';
 
 use Modelos\DatosPresupuesto;
 
-$conn = mysqli_connect(SERVER, USERNAME, PASSWORD, BD) or die("Error al conectar -> " . SERVER . " - " . USERNAME . " - " . PASSWORD . " - " . BD);
-$tipo = $_POST['TIPO'];
-$cliente = $_POST['user'];
+mysqli_report(MYSQLI_REPORT_OFF);
+$conn = @mysqli_connect(SERVER, USERNAME, PASSWORD, BD);
+
+if (!$conn) {
+    echo json_encode(array(
+        "OK" => 0,
+        "ERROR" => "No hay conexion con la base de datos",
+        "DEBUG_DB_ERROR" => mysqli_connect_error()
+    ));
+    exit;
+}
+
+if (isset($_POST['TIPO']) && (int) $_POST['TIPO'] === 99) {
+    echo json_encode(array(
+        "OK" => 1,
+        "DB_CONNECTED" => mysqli_ping($conn) ? 1 : 0,
+        "DB_NAME" => BD
+    ));
+    exit;
+}
+
+$tipo = isset($_POST['TIPO']) ? (int) $_POST['TIPO'] : 0;
+$cliente = '14978';
 $codigo_cliente = null;
 $cif_sin_web = null;
 
@@ -28,54 +48,6 @@ switch ($tipo) {
     case 1: // Calcula el presupuesto PVP
 
         $codigo_cliente = '14978';
-        // $endpoint = "https://webservices.ps-pool.com/WebServices/obtener_cliente_configurador.php?cliente=" . $cliente;
-        // $response = file_get_contents($endpoint);
-
-        // if ($response !== false) {
-        //     // LIMPIA el BOM si lo hay
-        //     $response = preg_replace('/^\xEF\xBB\xBF/', '', $response);
-        //     $data = json_decode($response, true);
-
-        //     if (isset($data['codigo_padre'])) {
-        //         $codigo_padre = $data['codigo_padre'];
-        //         $codigo_cliente =  $codigo_padre;
-        //     } else {
-        //         echo "No se encontró 'codigo_padre' en la respuesta.";
-        //         var_dump($data); // Para depurar
-        //     }
-        // } else {
-        //     echo "Error al obtener datos del endpoint.";
-        // }
-
-        // $sql = "SELECT CIF FROM CLIENTES WHERE CODIGO = '" . $cliente . "'";
-        // $result = mysqli_query($conn, $sql);
-
-        // if ($result && mysqli_num_rows($result) > 0) {
-        //     $row = mysqli_fetch_assoc($result);
-        //     $cif = $row['CIF'];
-
-        //     $pos = strpos($cif, '-WEB');
-        //     if ($pos !== false) {
-        //         $cif_sin_web = substr($cif, 0, $pos);
-        //     } else {
-        //         $cif_sin_web = $cif; // Si no se encuentra '-WEB', usar el CIF completo
-        //     }
-
-        //     // Paso 3: Buscar el código del cliente que tiene el CIF modificado
-        //     $sql = "SELECT CODIGO FROM CLIENTES WHERE CIF = '" . $cif_sin_web . "'";
-        //     $result = mysqli_query($conn, $sql);
-
-        //     if ($result && mysqli_num_rows($result) > 0) {
-        //         $row2 = mysqli_fetch_assoc($result);
-        //         $codigo_cliente = $row2['CODIGO'];
-        //         //echo "El código del cliente con el CIF sin 'WEB' es: " . $codigo_cliente;
-        //     } else {
-        //         echo "No se encontró ningún cliente con el CIF modificado.";
-        //     }
-        // } else {
-        //     echo "No se encontró ningún cliente con el código proporcionado.";
-        // }
-
 
         $modelo             = strtoupper($_POST['MODELO']);
         $subtipo            = str_replace(' ', '-', strtoupper($_POST['SUBTIPO']));
@@ -252,38 +224,52 @@ function calcularYGrabarPresupuesto($datos, $conn)
     }
 
     $datosMotor = array();
-    //VAMOS A APROVECHAR EN ESTE SWITCH PARA PONER QUE LOS SUBTIPOS NUEVOS TIENEN QUE TENER VIGA SI O SI
-    switch ($datos->subtipo) {
+    $subtipoUpper = strtoupper((string) $datos->subtipo);
 
+    if (!@mysqli_ping($conn)) {
+        return devolverError("Conexion con la base de datos inactiva");
+    }
+
+    //VAMOS A APROVECHAR EN ESTE SWITCH PARA PONER QUE LOS SUBTIPOS NUEVOS TIENEN QUE TENER VIGA SI O SI
+    switch ($subtipoUpper) {
         case "TOP":
         case "DUO":
         case "CAVE":
             $datos->conViga = true;
             $datos->conTapa = true;
-            $datosMotor = calcularMotorTopDuoCave($conn, $anchoTotal, $largoTotal, $datos->profundidadTapa, $datos->profundidadPiscina, $datos->modelo, $datos->subtipo, $datos->tipoPiscina);
-            errorLog(print_r($datos, true));
+            $datosMotor = calcularMotorTopDuoCave($conn, $anchoTotal, $largoTotal, $datos->profundidadTapa, $datos->profundidadPiscina, $datos->modelo, $subtipoUpper, $datos->tipoPiscina);
             break;
 
-        case "DECK": //SI ES DE CORONACION O SUMERGIDA CON EL SUBTIPO "DEC" SE DEJA COMO SE HACIA ANTES
+        case "DECK":
             $datosMotor = calcularDeck($conn, $anchoTotal, $largoTotal, $datos->modelo, $datos->tipoPiscina);
             break;
 
-        case "TERRA": //SI ES DE CORONACION O SUMERGIDA CON EL SUBTIPO "DEC" SE DEJA COMO SE HACIA ANTES
-        case "TERRA_SLIM": //SI ES DE CORONACION O SUMERGIDA CON EL SUBTIPO "DEC" SE DEJA COMO SE HACIA ANTES
-        case "TERRA_LITE": //SI ES DE CORONACION O SUMERGIDA CON EL SUBTIPO "DEC" SE DEJA COMO SE HACIA ANTES
-        case "TERRA_SOLAR": //SI ES DE CORONACION O SUMERGIDA CON EL SUBTIPO "DEC" SE DEJA COMO SE HACIA ANTES
-            $datosMotor = calcularTerra($conn, $anchoTotal, $largoTotal, $datos->modelo, $datos->tipoPiscina, $datos->subtipo);
+        case "TERRA":
+        case "TERRA_SLIM":
+        case "TERRA_LITE":
+        case "TERRA_SOLAR":
+            $datosMotor = calcularTerra($conn, $anchoTotal, $largoTotal, $datos->modelo, $datos->tipoPiscina, $subtipoUpper);
             break;
+
+        default:
+            return devolverError("Subtipo de cubierta no soportado: " . $datos->subtipo);
     }
 
     //SI HA HABIDO ALGUN PROBLEMA OBTENIENDO EL MOTOR, DEVUELVO EL ERROR
+    if (!is_array($datosMotor) || !array_key_exists("OK", $datosMotor)) {
+        return devolverError("No se han podido obtener datos del motor para el subtipo: " . $datos->subtipo);
+    }
+
     if (!$datosMotor["OK"]) {
-        return devolverError($datosMotor["ERROR"]);
+        return devolverError($datosMotor["ERROR"] ?? "Error al obtener los datos del motor");
     }
 
     if (!empty($datosMotor)) //SI ESTÁ VACIO ES QUE NO HAY UN MOTOR CON ESAS CARACTERISTICAS DISPONIBLE
     {
-        $largo = $datosMotor["LONGITUD"];
+        $largo = $datosMotor["LONGITUD"] ?? $datosMotor["LARGOPISCINA"] ?? null;
+        if ($largo === null) {
+            return devolverError($datosMotor["ERROR"] ?? "No se ha podido obtener la longitud del motor");
+        }
 
         if (((float) $largo) >= ((float) $largoTotal)) // SI LA LONGITUD TOTAL ES MENOR O IGUAL A LA MAXIMA, ES VALIDO
         {

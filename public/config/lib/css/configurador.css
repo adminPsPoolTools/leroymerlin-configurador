@@ -8,7 +8,7 @@
   --lm-surface: #ffffff;
   --lm-bg: #f3f5f1;
   --lm-danger: #ba1e1e;
-  --pscover-step-height: 680px;
+  --pscover-step-height: 560px;
 }
 
 .enespera {
@@ -1073,16 +1073,33 @@ input:checked + .slider:before {
   min-height: var(--pscover-step-height);
 }
 
+#configurador .ps-step-screen.is-visible-step {
+  display: grid;
+  grid-template-columns: minmax(260px, 38%) minmax(0, 1fr);
+  align-items: stretch;
+}
+
 #configurador .ps-step-screen .dibujo,
 #configurador .ps-step-screen .formtemp {
+  float: none;
+  width: auto;
   min-height: var(--pscover-step-height);
 }
 
-#configurador .ps-step-screen .dibujo > div[id^="dibu"] {
+#configurador .ps-step-screen .dibujo {
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+#configurador .ps-step-screen .dibujo > div[id^="dibu"],
+#configurador .ps-step-screen .dibujo > div {
+  width: 100%;
   height: 100%;
 }
 
-#configurador .ps-step-screen .dibujo > div[id^="dibu"] > img {
+#configurador .ps-step-screen .dibujo > div[id^="dibu"] > img,
+#configurador .ps-step-screen .dibujo > div > img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -1107,6 +1124,7 @@ input:checked + .slider:before {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  padding: clamp(18px, 2.6vw, 34px);
 }
 
 #configurador .flex {
@@ -1147,16 +1165,27 @@ input:checked + .slider:before {
 
 #configurador .botones {
   margin-top: auto;
-  padding-top: 20px;
+  padding-top: 14px;
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: flex-end;
+  flex-wrap: nowrap;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
 }
 
 #configurador .botones .divsiguiente,
 #configurador .botones .divanterior {
   float: none;
+  width: auto;
+  flex: 1 1 0;
+}
+
+#configurador .botones .divanterior {
+  order: 1;
+}
+
+#configurador .botones .divsiguiente {
+  order: 2;
 }
 
 #configurador .btnsiguiente,
@@ -1165,9 +1194,12 @@ input:checked + .slider:before {
   right: auto;
   bottom: auto;
   float: none;
-  width: auto;
-  min-width: 170px;
+  width: 100%;
+  min-width: 0;
   margin-right: 0;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #configurador .btnanterior {
@@ -1178,24 +1210,80 @@ input:checked + .slider:before {
 #piscina #dibupiscina {
   margin: clamp(16px, 4vw, 60px) auto;
   width: min(300px, calc(100% - 24px));
-  height: clamp(280px, 52vh, 500px);
+  height: clamp(220px, 40vh, 360px);
 }
 
-#lamina #divpc[style*="display: block"],
-#lamina #divpvc[style*="display: block"] {
-  display: flex !important;
-  flex-wrap: wrap;
+#lamina .lamina-material-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
+  width: 100%;
+}
+
+#lamina .lamina-material-row .matlamina {
+  width: 100%;
+  margin: 0;
+  justify-content: center;
+}
+
+#lamina .lamina-color-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  align-content: start;
+  width: 100%;
+}
+
+#lamina .lamina-color-grid[style*="display: block"],
+#lamina .lamina-color-grid[style*="display:block"],
+#lamina .lamina-color-grid[style*="display: grid"],
+#lamina .lamina-color-grid[style*="display:grid"],
+#lamina #divpc[style*="display: block"],
+#lamina #divpc[style*="display:block"],
+#lamina #divpc[style*="display: grid"],
+#lamina #divpc[style*="display:grid"],
+#lamina #divpvc[style*="display: block"],
+#lamina #divpvc[style*="display:block"],
+#lamina #divpvc[style*="display: grid"],
+#lamina #divpvc[style*="display:grid"] {
+  display: grid !important;
 }
 
 #lamina .collamina {
-  width: calc(50% - 10px);
-  min-height: 124px;
+  width: 100%;
+  float: none;
+  min-height: 92px;
   margin: 0;
   display: inline-flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 4px;
+  padding: 6px 4px;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+#lamina .collamina img {
+  width: 46px;
+  height: 34px;
+  object-fit: contain;
+  margin: 0 auto;
+}
+
+#lamina #dibulamina {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 10px;
+}
+
+#lamina #dibulamina > img,
+#lamina #dibulamina .lamina-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
 }
 
 #presupuesto,
@@ -1207,9 +1295,24 @@ input:checked + .slider:before {
   font-size: clamp(1.8rem, 5vw, 2.6rem);
 }
 
+#lamina .formtemp {
+  margin-bottom: 0;
+}
+
+#error,
+#finalizar,
+#comprobando,
+#errorCliente {
+  margin-bottom: 24px;
+}
+
 @media screen and (max-width: 1100px) {
   :root {
-    --pscover-step-height: 620px;
+    --pscover-step-height: 500px;
+  }
+
+  #configurador .ps-step-screen.is-visible-step {
+    grid-template-columns: 1fr;
   }
 
   #cubierta .dibujo,
@@ -1250,7 +1353,7 @@ input:checked + .slider:before {
 
 @media screen and (max-width: 900px) {
   :root {
-    --pscover-step-height: 560px;
+    --pscover-step-height: 460px;
   }
 
   .wxh,
@@ -1289,7 +1392,7 @@ input:checked + .slider:before {
 
 @media screen and (max-width: 700px) {
   :root {
-    --pscover-step-height: 520px;
+    --pscover-step-height: 0px;
   }
 
   .pscover-stepper {
@@ -1305,22 +1408,44 @@ input:checked + .slider:before {
   }
 
   #configurador .botones {
-    justify-content: stretch;
+    gap: 8px;
+    flex-wrap: nowrap;
   }
 
   #configurador .botones .divsiguiente,
   #configurador .botones .divanterior {
-    width: 100%;
+    width: auto;
+    flex: 1 1 0;
   }
 
   #configurador .btnsiguiente,
   #configurador .btnanterior {
     width: 100%;
     min-width: 0;
+    font-size: 14px;
+    padding: 11px 8px;
+  }
+
+  #configurador .ps-step-screen,
+  #configurador .ps-step-screen .dibujo,
+  #configurador .ps-step-screen .formtemp {
+    min-height: 0;
+  }
+
+  #lamina .lamina-color-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  #lamina .lamina-material-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
   }
 
   #lamina .collamina {
     width: 100%;
+    min-height: 78px;
+    font-size: 11px;
+    padding: 5px 4px;
   }
 
   #configurador .switch + .nombrecheck {
@@ -1330,5 +1455,448 @@ input:checked + .slider:before {
 
   #configurador h2 br {
     display: none;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  #configurador .btnsiguiente,
+  #configurador .btnanterior {
+    font-size: 13px;
+    padding: 10px 6px;
+  }
+
+  #lamina .lamina-material-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #configurador .btnsiguiente img,
+  #configurador .btnanterior img {
+    width: 11px;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+}
+
+/* Tailwind-style layout lock for configurador steps */
+#configurador .ps-step-screen,
+#configurador .ps-step-screen .dibujo,
+#configurador .ps-step-screen .formtemp {
+  min-height: 0 !important;
+}
+
+#configurador .ps-step-screen.is-visible-step {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 0;
+  min-height: clamp(320px, 52vh, 480px);
+}
+
+#configurador .ps-step-screen.is-visible-step > .pscover-media,
+#configurador .ps-step-screen.is-visible-step > .dibujo {
+  order: 1;
+  display: block !important;
+  flex: 0 0 clamp(150px, 34%, 380px);
+  width: clamp(150px, 34%, 380px) !important;
+  min-width: 150px;
+  max-width: 380px;
+  overflow: hidden;
+  border-right: 1px solid var(--lm-border);
+  border-bottom: 0 !important;
+}
+
+#configurador .ps-step-screen.is-visible-step > .pscover-form,
+#configurador .ps-step-screen.is-visible-step > .formtemp {
+  order: 2;
+  display: flex !important;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: auto !important;
+  min-width: 0;
+  gap: 0.55rem;
+  padding: clamp(14px, 2vw, 24px);
+}
+
+#configurador .ps-step-screen.is-visible-step > .pscover-media > div,
+#configurador .ps-step-screen.is-visible-step > .dibujo > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+#configurador .ps-step-screen.is-visible-step > .pscover-media > div > img,
+#configurador .ps-step-screen.is-visible-step > .dibujo > div > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+/* Right side: radio/switch always to the left, content label to the right */
+#configurador .formtemp .ps-radio-option,
+#configurador .formtemp .flex {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+#configurador .formtemp .ps-radio-option .switch,
+#configurador .formtemp .flex .switch {
+  order: 1;
+  margin: 0;
+  flex: 0 0 auto;
+}
+
+#configurador .formtemp .ps-radio-option .nombrecheck,
+#configurador .formtemp .flex .nombrecheck {
+  order: 2;
+  margin: 0;
+  float: none;
+  flex: 1 1 auto;
+  text-align: left;
+}
+
+/* Right side: when there is label + input row, input block stays on the right */
+#configurador .formtemp .ps-field-row {
+  display: grid;
+  grid-template-columns: minmax(130px, 42%) minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+}
+
+#configurador .formtemp .ps-field-row .wxh,
+#configurador .formtemp .ps-field-row .dato {
+  float: none;
+  margin: 0;
+  width: auto;
+}
+
+#configurador .formtemp .ps-field-row .dato input {
+  width: 100%;
+  margin-left: 0;
+}
+
+#configurador .salto {
+  height: 10px !important;
+}
+
+#configurador .ps-step-screen.is-visible-step .pscover-actions,
+#configurador .ps-step-screen.is-visible-step .botones {
+  margin-top: 10px;
+  padding-top: 12px;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#configurador .ps-step-screen.is-visible-step .botones .divanterior,
+#configurador .ps-step-screen.is-visible-step .botones .divsiguiente {
+  flex: 1 1 0;
+}
+
+#configurador .ps-step-screen.is-visible-step .botones .divanterior {
+  order: 1;
+}
+
+#configurador .ps-step-screen.is-visible-step .botones .divsiguiente {
+  order: 2;
+}
+
+#configurador .ps-step-screen.is-visible-step .btnanterior,
+#configurador .ps-step-screen.is-visible-step .btnsiguiente {
+  width: 100%;
+}
+
+#configurador .ps-step-screen.is-visible-step #btnvolverFin .btnanterior {
+  width: 100% !important;
+}
+
+#piscina .ps-piscina-layout {
+  align-items: start;
+}
+
+#piscina #hormigon_fibra {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#piscina #hormigon_fibra .ps-radio-option {
+  justify-content: flex-start;
+}
+
+#piscina .ps-input-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#piscina .ps-field-row {
+  display: grid;
+  grid-template-columns: minmax(140px, 42%) minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+}
+
+#piscina .ps-input-col .wxh,
+#piscina .ps-input-col .dato {
+  float: none;
+  width: auto;
+  margin: 0;
+}
+
+#piscina .ps-input-col .dato input {
+  width: 100%;
+  margin-left: 0;
+}
+
+#piscina .ps-input-col .errorcampo {
+  margin-left: 0;
+  margin-top: 6px;
+}
+
+#cubierta .ps-cubierta-layout {
+  align-items: start;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+#cubierta .pscover-form,
+#cubierta .formtemp {
+  padding-left: 8px !important;
+}
+
+#cubierta .ps-cubierta-layout #delta,
+#cubierta .ps-cubierta-layout #altea,
+#cubierta .ps-cubierta-layout #acabadocubierta {
+  float: none !important;
+  width: auto !important;
+}
+
+#cubierta .ps-cubierta-layout .ps-radio-col {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  width: auto !important;
+}
+
+#cubierta .ps-cubierta-layout .flex {
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+}
+
+#cubierta .ps-cubierta-layout .switch {
+  margin: 0;
+}
+
+#cubierta .cubierta-opcion {
+  display: flex !important;
+  width: auto !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  gap: 10px;
+}
+
+#cubierta .cubierta-opcion .switch {
+  order: 1 !important;
+  margin: 0 !important;
+  flex: 0 0 auto;
+}
+
+#cubierta .cubierta-opcion .nombrecheck {
+  order: 2 !important;
+  margin: 0 !important;
+  float: none;
+  text-align: left !important;
+}
+
+#cubierta .ps-cubierta-layout .flex .switch {
+  order: 1;
+  flex: 0 0 auto;
+}
+
+#cubierta .ps-cubierta-layout .flex .nombrecheck {
+  order: 2;
+  margin: 0;
+  text-align: left;
+}
+
+#cubierta #dibucubierta {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+#cubierta #dibucubierta img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  object-position: center;
+}
+
+/* Final lock: option rows always start from the left */
+#configurador .ps-step-screen.is-visible-step .formtemp .ps-radio-option,
+#configurador .ps-step-screen.is-visible-step .formtemp .flex {
+  width: 100%;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  text-align: left;
+}
+
+#configurador .ps-step-screen.is-visible-step .formtemp .ps-radio-option .switch,
+#configurador .ps-step-screen.is-visible-step .formtemp .flex .switch {
+  order: 1 !important;
+  margin: 0 10px 0 0 !important;
+  align-self: center;
+}
+
+#configurador .ps-step-screen.is-visible-step .formtemp .ps-radio-option .nombrecheck,
+#configurador .ps-step-screen.is-visible-step .formtemp .flex .nombrecheck {
+  order: 2 !important;
+  margin: 0 !important;
+  flex: 0 1 auto;
+  text-align: left !important;
+}
+
+#escalera .ps-escalera-layout {
+  align-items: start;
+}
+
+#escalera .ps-escalera-layout #medidasescalera {
+  margin-top: 0;
+}
+
+#escalera .ps-escalera-layout .largoanchoescalera,
+#escalera .ps-escalera-layout .formaescalera {
+  float: none;
+  width: auto;
+}
+
+#escalera .ps-escalera-layout .ps-field-row {
+  display: grid;
+  grid-template-columns: minmax(130px, 42%) minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+#escalera .ps-escalera-layout .wxh,
+#escalera .ps-escalera-layout .dato {
+  float: none;
+  width: auto;
+  margin: 0;
+}
+
+#escalera .ps-escalera-layout .dato input {
+  width: 100%;
+  margin-left: 0;
+}
+
+#escalera .ps-escalera-layout .errorcampo {
+  margin-left: 0;
+  margin-top: 6px;
+}
+
+#escalera .ps-escalera-layout .ps-radio-option + .ps-radio-option {
+  margin-top: 8px;
+}
+
+/* Compact mode when "Escalera = No" */
+#escalera.escalera-no.ps-step-screen.is-visible-step {
+  min-height: clamp(220px, 36vh, 300px);
+}
+
+#escalera.escalera-no #escaleraD {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+#escalera.escalera-no #escaleraD img {
+  width: 100%;
+  max-width: 280px;
+  max-height: 220px;
+  height: auto;
+  object-fit: contain;
+  object-position: center;
+}
+
+#escalera.escalera-no #dibuescalera,
+#escalera.escalera-no #escaleraF {
+  display: none !important;
+}
+
+#escalera.escalera-no .ps-escalera-layout {
+  grid-template-columns: 1fr !important;
+}
+
+#escalera.escalera-no .ps-escalera-layout .ps-input-col {
+  display: none !important;
+}
+
+@media screen and (max-width: 900px) {
+  #configurador .ps-step-screen.is-visible-step {
+    min-height: clamp(280px, 48vh, 420px);
+  }
+
+  #configurador .ps-step-screen.is-visible-step > .pscover-media,
+  #configurador .ps-step-screen.is-visible-step > .dibujo {
+    flex-basis: clamp(120px, 35%, 280px);
+    width: clamp(120px, 35%, 280px) !important;
+    min-width: 120px;
+    max-width: 280px;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  #configurador .ps-step-screen.is-visible-step {
+    min-height: clamp(240px, 44vh, 330px);
+  }
+
+  #configurador .ps-step-screen.is-visible-step > .pscover-media,
+  #configurador .ps-step-screen.is-visible-step > .dibujo {
+    flex-basis: clamp(92px, 35%, 170px);
+    width: clamp(92px, 35%, 170px) !important;
+    min-width: 92px;
+    max-width: 170px;
+  }
+
+  #configurador .ps-step-screen.is-visible-step > .pscover-form,
+  #configurador .ps-step-screen.is-visible-step > .formtemp {
+    padding: 10px;
+  }
+
+  #configurador .ps-step-screen.is-visible-step .botones {
+    gap: 6px;
+  }
+
+  #piscina .ps-field-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  #escalera .ps-escalera-layout .ps-field-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  #configurador .formtemp .ps-field-row {
+    grid-template-columns: 1fr;
   }
 }

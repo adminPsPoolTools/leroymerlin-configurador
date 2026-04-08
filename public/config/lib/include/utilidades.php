@@ -771,26 +771,17 @@ function calcularTerra($conn, $anchoTotal, $largoTotal, $modelo, $tipoPiscina, $
         "ERROR" => ""
     ];
 
-    $metros2 = ceil($largoTotal * $anchoTotal) / 1000;
-    if ($suptipo == "TERRA_SOLAR") {
-        if ($anchoTotal <= 500 | $metros2 < 320) {
-            $datosTerra170Json = file_get_contents('datosTerraSolar140.json');
-            $datosTerra = json_decode($datosTerra170Json, true);
+    $subtipoNormal = strtoupper((string) $suptipo);
+
+    if ($subtipoNormal === "TERRA_SOLAR") {
+        if ($anchoTotal <= 600) {
+            $datosTerra140Json = file_get_contents('datosTerraSolar140.json');
+            $datosTerra = json_decode($datosTerra140Json, true);
         } else {
             $result["ERROR"] = "No se encontró un valor válido para las dimensiones dadas.";
             return $result;
         }
-    } else {
-        //Dependiendo del ancho o largo cogeremos el enrollador de 140 o 170
-        if ($anchoTotal > 500 | $largoTotal > 1200) {
-            $datosTerra170Json = file_get_contents('datosTerra170.json');
-            $datosTerra = json_decode($datosTerra170Json, true);
-        } else {
-            $datosTerra140Json = file_get_contents('datosTerra140.json');
-            $datosTerra = json_decode($datosTerra140Json, true);
-        }
     }
-
 
     // Obtener los valores superiores de ancho y largo
     $anchoSuperior = getNextOrExact(array_keys($datosTerra), $anchoTotal);
@@ -799,7 +790,6 @@ function calcularTerra($conn, $anchoTotal, $largoTotal, $modelo, $tipoPiscina, $
     // Validar si los valores existen en la tabla
     if (isset($datosTerra[$anchoSuperior][$largoSuperior])) {
         $result["VALOR"] = $datosTerra[$anchoSuperior][$largoSuperior];
-        $result["OK"] = true;
         $resultadoMotor = $result["VALOR"];
     } else {
         $result["ERROR"] = "No se encontró un valor válido para las dimensiones dadas.";
@@ -809,7 +799,7 @@ function calcularTerra($conn, $anchoTotal, $largoTotal, $modelo, $tipoPiscina, $
                 FROM ARTICULOS
                 WHERE ANCHURA  >= $anchoSuperior
                 AND TIPO_MOTOR = '$modelo'
-                AND SUBTIPO_MOTOR = '$suptipo'
+                AND UPPER(SUBTIPO_MOTOR) = UPPER('$suptipo')
                 AND FUERZA_SOPORTADA = '$resultadoMotor'
                 ORDER BY ANCHURA ASC, PRECIO ASC
                 LIMIT 1";
@@ -823,6 +813,7 @@ function calcularTerra($conn, $anchoTotal, $largoTotal, $modelo, $tipoPiscina, $
         $result["PRECIO"]   = $mrow->PRECIO;
         $result["OK"]       = true;
     } else {
+        $result["OK"] = false;
         $sql = "SELECT COUNT(CODIGO) AS N_ROWS
                 FROM ARTICULOS
                 WHERE ANCHURA >= $anchoSuperior
@@ -868,7 +859,6 @@ function calcularDeck($conn, $anchoTotal, $largoTotal, $modelo, $tipoPiscina)
     // Validar si los valores existen en la tabla
     if (isset($datosDeck[$anchoSuperior][$largoSuperior])) {
         $result["VALOR"] = $datosDeck[$anchoSuperior][$largoSuperior];
-        $result["OK"] = true;
         $resultadoMotor = $result["VALOR"];
     } else {
         $result["ERROR"] = "No se encontró un valor válido para las dimensiones dadas.";
@@ -883,7 +873,32 @@ function calcularDeck($conn, $anchoTotal, $largoTotal, $modelo, $tipoPiscina)
                 ORDER BY ANCHURA ASC, PRECIO ASC
                 LIMIT 1";
 
+    if (!($conn instanceof mysqli)) {
+        error_log("[PSDEBUG] calcularDeck: \$conn no es instancia de mysqli");
+        $result["OK"] = false;
+        $result["ERROR"] = "Conexion no valida";
+        return $result;
+    }
+
+    if (!mysqli_ping($conn)) {
+        error_log("[PSDEBUG] calcularDeck: conexion NO activa. Error: " . mysqli_error($conn));
+        $result["OK"] = false;
+        $result["ERROR"] = "Conexion inactiva";
+        return $result;
+    }
+
+    error_log("[PSDEBUG] calcularDeck: conexion OK, ejecutando SQL");
+    error_log("[PSDEBUG] SQL calcularDeck: " . $sql);
+
     $mres = mysqli_query($conn, $sql);
+    if ($mres === false) {
+        error_log("[PSDEBUG] calcularDeck: SQL ERROR -> " . mysqli_error($conn));
+        $result["OK"] = false;
+        $result["ERROR"] = "Error SQL en calcularDeck";
+        return $result;
+    }
+
+    error_log("[PSDEBUG] calcularDeck: SQL OK, filas=" . mysqli_num_rows($mres));
     $mrow = mysqli_fetch_object($mres);
 
     if (!empty($mrow)) {
@@ -892,6 +907,7 @@ function calcularDeck($conn, $anchoTotal, $largoTotal, $modelo, $tipoPiscina)
         $result["PRECIO"]   = $mrow->PRECIO;
         $result["OK"]       = true;
     } else {
+        $result["OK"] = false;
         $sql = "SELECT COUNT(CODIGO) AS N_ROWS
                 FROM ARTICULOS
                 WHERE ANCHURA >= $anchoSuperior
@@ -964,7 +980,6 @@ function calcularMotorTopDuoCave($conn, $anchoTotal, $largoTotal, $profundidadTa
     // Validar si los valores existen en la tabla
     if (isset($datosTopDuoCave[$profundidadSuperior][$anchoSuperior][$largoSuperior])) {
         $result["VALOR"] = $datosTopDuoCave[$profundidadSuperior][$anchoSuperior][$largoSuperior];
-        $result["OK"] = true;
         $resultadoMotor = $result["VALOR"];
     } else {
         $result["ERROR"] = "No se encontró un valor válido para las dimensiones dadas.";
@@ -988,6 +1003,7 @@ function calcularMotorTopDuoCave($conn, $anchoTotal, $largoTotal, $profundidadTa
         $result["PRECIO"]   = $mrow->PRECIO;
         $result["OK"]       = true;
     } else {
+        $result["OK"] = false;
         $sql = "SELECT COUNT(CODIGO) AS N_ROWS
                 FROM ARTICULOS
                 WHERE ANCHURA >= $anchoSuperior

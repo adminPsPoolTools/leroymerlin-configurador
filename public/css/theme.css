@@ -119,7 +119,7 @@ header.cabhome {
 
 /* SECCIONES */
 
-.seccion header { position: relative; z-index: 0; height: 450px; background-repeat: no-repeat;  background-position: right; } //background-size: 1050px 450px;
+.seccion header { position: relative; z-index: 0; height: 400px; background-repeat: no-repeat;  background-position: right; } //background-size: 1050px 450px;
 .seccion header.titulo h1 {
     font-size: 32px;
 }

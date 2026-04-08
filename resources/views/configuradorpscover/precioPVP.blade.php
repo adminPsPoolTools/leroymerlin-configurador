@@ -1,8 +1,8 @@
 <div id="preciopvp">
-    <div class="dibujo">
+    <div class="dibujo pscover-media relative bg-lime-50">
         <div id="dibuprecio"><img src="../../../config/img/precio.jpg" width="100%"></div>
     </div>
-    <div class="formtemp">
+    <div class="formtemp pscover-form flex flex-col">
         <div id="mostrarprecio">
             <h2><img src="../../../config/img/icono-piscina.png"><br>P.V.P</h2>
             <div id="presupuestoPVP"></div>
@@ -23,7 +23,7 @@
                 Por favor, no cierre la página</div>
         </div>
 
-        <div class="botones">
+        <div class="botones pscover-actions flex items-center gap-3">
             <div class="divsiguiente"><button id="btnprecioPVPS" class="btnsiguiente">Siguiente <img
                         src="../../../config/img/flecha-s.png" align="absmiddle"></button></div>
             <div class="divanterior"><button id="btnprecioPVPA" class="btnanterior"><img
@@ -31,3 +31,4 @@
         </div>
     </div>
 </div>
+

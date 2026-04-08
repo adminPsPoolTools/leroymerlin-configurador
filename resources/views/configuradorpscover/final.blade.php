@@ -1,9 +1,9 @@
 <div id="final">
-    <div class="dibujo">
+    <div class="dibujo pscover-media relative bg-lime-50">
         <div id="dibuprecio"><img src="../../../config/img/cubierta.jpg" width="100%"></div>
     </div>
 
-    <div class="formtemp">
+    <div class="formtemp pscover-form flex flex-col">
         <!-- <h2>¿Quieres enviarlo por email?</h2><br> -->
         <h2>Generar oferta</h2><br>
 
@@ -22,7 +22,7 @@
         <!-- <button id="enviaremail">Enviar por email</button> -->
         <button id="enviaremail">Recibir email</button>
 
-        <div class="botones">
+        <div class="botones pscover-actions flex items-center gap-3">
             <div id="btnvolverFin" class="divsiguiente ocultar"><button class="btnanterior" style="width: 300px;"><img
                         src="../../../config/img/flecha-a.png" align="absmiddle">
                     Volver al inicio</button></div>
@@ -31,3 +31,4 @@
         </div>
     </div>
 </div>
+
