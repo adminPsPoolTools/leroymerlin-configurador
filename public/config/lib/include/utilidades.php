@@ -337,13 +337,7 @@ function insertarLaminas($conn, $datos, $nuevoCodigo, &$linea, &$transacciones, 
         return devolverError("No hay láminas con esas características $sql");
     }
 
-    //Sumamos 100 cm al largo y redondeamo el entero superior.
-    if ($datos->subtipo != 'TERRA') {
-        $nLaminas = ceil(($datos->largoPiscina + 100) / 7.5);
-    } else {
-        $nLaminas = ceil(($datos->largoPiscina) / 7.5);
-    }
-
+    $nLaminas = ceil(($datos->largoPiscina) / 7.5);
     $nLaminas = ($nLaminas * 7.5) / 100;
 
     $precioLaminas = obtenerPVPArticulo($mrow2->CODIGO, $datos->cliente, $mrow2->PRECIO, $nLaminas, $conn);

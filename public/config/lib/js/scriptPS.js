@@ -3,6 +3,16 @@ $(document).ready(function () {
 
     var url = "../config/lib/pscover.php";
 
+    function aplicarConfiguracionFijaTerraSolar() {
+        $("#tipoCubierta").val("C");
+        $("#deltaltea").val("terra_solar");
+        $("#tipoInsta").val("E");
+    }
+
+    aplicarConfiguracionFijaTerraSolar();
+    $("#cubierta").hide();
+    $("#piscina").show();
+
     function enviar() {
 
         $('#enviando').fadeIn('slow');
@@ -107,8 +117,9 @@ $(document).ready(function () {
     });
 
     function volverAlInicio() {
-        $("#piscina, #escalera, #lamina, #instalacion, #preciopvp, #cod_cliente, #precio, #precioneto, #cliente0, #imprimirdiv, #final").hide();
-        $("#cubierta").show();
+        aplicarConfiguracionFijaTerraSolar();
+        $("#escalera, #lamina, #instalacion, #preciopvp, #cod_cliente, #precio, #precioneto, #cliente0, #imprimirdiv, #final").hide();
+        $("#piscina").show();
     }
 
     $("#btnvolverFin, #inicio").click(function (e) {
@@ -247,9 +258,9 @@ $(document).ready(function () {
     /*********** PISCINA *************/
 
     // Botones atrÃƒÆ’Ã‚Â¡s / siguiente
-    $("#btnpiscinaA").click(function () {
-        $("#piscina").hide();
-        $("#cubierta").show();
+    $("#btnpiscinaA").click(function (e) {
+        e.preventDefault();
+        volverAlInicio();
     });
 
     $("#btnpiscinaS").click(function () {
@@ -435,8 +446,9 @@ $(document).ready(function () {
 
         $("#TIPO").val(1);
         $("#lamina").hide();
-        $("#instalacion").show();
+        $("#preciopvp").show();
         $('#error').hide();
+        enviar();
 
     });
 
@@ -520,7 +532,7 @@ $(document).ready(function () {
 
     // Botones atrÃƒÆ’Ã‚Â¡s / siguiente
     $("#btnprecioPVPA").click(function () {
-        $("#instalacion").show();
+        $("#lamina").show();
         $("#preciopvp").hide();
     });
 

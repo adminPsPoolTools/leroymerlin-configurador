@@ -29,8 +29,8 @@
             </div>
 
             <form name="formdatos" id="formdatos" method="post">
-                <input type="hidden" name="MODELO" id="tipoCubierta">
-                <input type="hidden" name="SUBTIPO" id="deltaltea"> <!-- Submodelo -->
+                <input type="hidden" name="MODELO" id="tipoCubierta" value="C">
+                <input type="hidden" name="SUBTIPO" id="deltaltea" value="terra_solar"> <!-- Submodelo -->
                 <input type="hidden" name="PROFUNDIDAD_TAPA" id="profundidadTapa"> <!-- Submodelo -->
                 <input type="hidden" name="PROFUNDIDAD_PIS" id="profundidadPis"> <!-- Submodelo -->
                 <input type="hidden" name="CONVIGA" id="conViga"> <!-- viga [true/false] -->
@@ -45,7 +45,7 @@
                 <input type="hidden" name="ESCALERAROMANA" id="escaleraromana"> <!-- Escalera romana -->
                 <input type="hidden" name="TIPOLAMINA" id="tipoLamina"> <!-- Material lÃƒÂ¡mina -->
                 <input type="hidden" name="COLORLAMINA" id="colorLamina"> <!-- Color lÃƒÂ¡mina -->
-                <input type="hidden" name="TIPOINSTALACION" id="tipoInsta"> <!-- Tipo de instalacion -->
+                <input type="hidden" name="TIPOINSTALACION" id="tipoInsta" value="E"> <!-- Tipo de instalacion -->
                 <input type="hidden" name="PROVINCIA" id="provinciaPrecio"> <!-- Provincia -->
                 <input type="hidden" name="IMPORTEINSTALACION" id="instaprecio"> <!-- Precio de instalaciÃƒÂ³n -->
                 <input type="hidden" name="DATOSCLIENTEFINAL" id="datoscliente"> <!-- Precio de instalaciÃƒÂ³n -->
@@ -73,12 +73,6 @@
             <div id="configurador">
 
                 <!---------------------------------------->
-                <!--              CUBIERTA              -->
-                <!---------------------------------------->
-
-                @include('configuradorpscover.cubierta')
-
-                <!---------------------------------------->
                 <!--              PISCINA               -->
                 <!---------------------------------------->
 
@@ -101,7 +95,6 @@
                 <!--            INSTALACIÃƒâ€œN             -->
                 <!---------------------------------------->
 
-                @include('configuradorpscover.instalacion')
 
 
                 <!---------------------------------------->
@@ -138,10 +131,6 @@
                 {
                     id: 'lamina',
                     label: 'Lamina'
-                },
-                {
-                    id: 'instalacion',
-                    label: 'Instalacion'
                 },
                 {
                     id: 'preciopvp',
