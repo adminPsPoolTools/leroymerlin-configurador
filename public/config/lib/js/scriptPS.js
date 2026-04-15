@@ -90,13 +90,21 @@ $(document).ready(function () {
                 $('#enviando').fadeOut('slow');
                 if (response.OK == 1) {
 
-                    var customWindow = window.open('', 'PRINT', 'height=auto, width=auto');
-                    var html = response.HTML;
-                    customWindow.document.write(html);
-                    customWindow.document.close();
-                    customWindow.focus();
-                    customWindow.print();
-                    customWindow.close();
+                    var htmlContent = response.HTML;
+
+                    var pdfOptions = {
+                        margin: 2,
+                        filename: 'Presupuesto_' + $("#codpresupuesto").val() + '.pdf',
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2, imageTimeout: 0 },
+                        jsPDF: { format: 'a3', compressed: true }
+                    };
+
+                    html2pdf().set(pdfOptions).from(htmlContent).toPdf().get('pdf').then(function (pdf) {
+                        var blob = pdf.output('blob');
+                        var blobUrl = URL.createObjectURL(blob);
+                        window.open(blobUrl, '_blank');
+                    });
 
                 } else if (response.OK == 0) {
                     alert("no");
@@ -106,7 +114,6 @@ $(document).ready(function () {
                 }
             },
             error: function (request, status, error) {
-                //PABLO GESPLANET
                 console.log("Request: " + request);
                 console.log("Status: " + status);
                 console.log("Error: " + error);
