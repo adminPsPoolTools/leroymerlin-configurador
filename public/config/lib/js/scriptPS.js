@@ -125,7 +125,7 @@ $(document).ready(function () {
 
     function volverAlInicio() {
         aplicarConfiguracionFijaTerraSolar();
-        $("#escalera, #lamina, #instalacion, #preciopvp, #cod_cliente, #precio, #precioneto, #cliente0, #imprimirdiv, #final").hide();
+        $("#escalera, #lamina, #lacado, #instalacion, #preciopvp, #cod_cliente, #precio, #precioneto, #cliente0, #imprimirdiv, #final").hide();
         $("#piscina").show();
     }
 
@@ -445,18 +445,49 @@ $(document).ready(function () {
 
 
     // Botones atrÃƒÆ’Ã‚Â¡s / siguiente
-    $("#btnlaminaA").click(function () {
+    $("#btnlaminaA").click(function (e) {
+        e.preventDefault();
         $("#lamina").hide(); $("#escalera").show();
     });
 
-    $("#btnlaminaS").click(function () {
+    $("#btnlaminaS").click(function (e) {
+        e.preventDefault();
 
-        $("#TIPO").val(1);
         $("#lamina").hide();
+        $("#lacado").show();
+
+    });
+
+    /*********** LACADO *************/
+
+    $("#btnlacadoS").prop('disabled', true);
+
+    $(".collacado").click(function (e) {
+        e.preventDefault();
+        $("#btnlacadoS").prop('disabled', false);
+        $(".collacado").removeClass("activo");
+        $(this).addClass("activo");
+        $("#colorLacado").val($(this).attr("value"));
+
+        var colorImg = $(this).find("img").attr("src");
+        if (colorImg) {
+            $("#dibulacado").html("<img class=\"lamina-preview-img\" src=\"" + colorImg + "\" width=\"100%\">");
+        }
+    });
+
+    $("#btnlacadoA").click(function (e) {
+        e.preventDefault();
+        $("#lacado").hide();
+        $("#lamina").show();
+    });
+
+    $("#btnlacadoS").click(function (e) {
+        e.preventDefault();
+        $("#TIPO").val(1);
+        $("#lacado").hide();
         $("#preciopvp").show();
         $('#error').hide();
         enviar();
-
     });
 
     /*********** INSTALACION *************/
@@ -539,7 +570,7 @@ $(document).ready(function () {
 
     // Botones atrÃƒÆ’Ã‚Â¡s / siguiente
     $("#btnprecioPVPA").click(function () {
-        $("#lamina").show();
+        $("#lacado").show();
         $("#preciopvp").hide();
     });
 

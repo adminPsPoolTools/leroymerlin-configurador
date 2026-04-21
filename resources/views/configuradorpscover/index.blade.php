@@ -12,7 +12,8 @@
     <link rel="stylesheet" type="text/css"
         href="{{ asset('config/lib/css/configurador.css') }}?v={{ filemtime(public_path('config/lib/css/configurador.css')) }}" />
     <script src="{{ asset('config/lib/js/jquery.min.js') }}"></script>
-    <script src="{{ asset('config/lib/js/scriptPS.js') }}"></script>
+    <script
+        src="{{ asset('config/lib/js/scriptPS.js') }}?v={{ filemtime(public_path('config/lib/js/scriptPS.js')) }}"></script>
     <script type="text/javascript" src="{{ asset('config/lib/html2pdf-master/dist/html2pdf.bundle.min.js') }}"></script>
 
     <div class="container max-w-screen-lg mx-auto mb-4 w-12/12 contenido">
@@ -29,6 +30,7 @@
             </div>
 
             <form name="formdatos" id="formdatos" method="post">
+                <input type="hidden" name="COLORLACADO" id="colorLacado"> <!-- Color lacado soporte -->
                 <input type="hidden" name="MODELO" id="tipoCubierta" value="C">
                 <input type="hidden" name="SUBTIPO" id="deltaltea" value="terra_solar"> <!-- Submodelo -->
                 <input type="hidden" name="PROFUNDIDAD_TAPA" id="profundidadTapa"> <!-- Submodelo -->
@@ -92,6 +94,12 @@
                 @include('configuradorpscover.laminas')
 
                 <!---------------------------------------->
+                <!--               LACADO               -->
+                <!---------------------------------------->
+
+                @include('configuradorpscover.lacado')
+
+                <!---------------------------------------->
                 <!--            INSTALACIÃƒâ€œN             -->
                 <!---------------------------------------->
 
@@ -131,6 +139,10 @@
                 {
                     id: 'lamina',
                     label: 'Lamina'
+                },
+                {
+                    id: 'lacado',
+                    label: 'Soporte lacado'
                 },
                 {
                     id: 'preciopvp',

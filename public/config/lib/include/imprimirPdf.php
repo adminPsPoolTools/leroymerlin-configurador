@@ -11716,7 +11716,7 @@ function obtenerFacturaPresupuesto($conn, $presupuesto, $datosClienteFinal, $apl
                 </ul>
                 <b>ACLARACIONES ESPEC&Iacute;FICAS PARA CADA MODELO DE CUBIERTA</b>
                 <ul>
-                    <li>TERRA: En caso de voladizo en la coronaci&oacute;n, ser&aacute; necesario un recorte de 30 cm.</li>
+                    <li>TERRA SOLAR: En caso de voladizo en la coronaci&oacute;n, ser&aacute; necesario un recorte de al menos 30 cm. dependiendo del voladizo de la coronaci&oacute;n</li>
 
                 </ul>
             </div>

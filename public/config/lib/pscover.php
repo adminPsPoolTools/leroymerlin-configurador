@@ -71,6 +71,7 @@ switch ($tipo) {
         $datosClienteFinal  = $_POST['DATOSCLIENTEFINAL'];
         $tipoTapa           = ($subtipo == "TOP" | $subtipo == "DUO" | $subtipo == "CAVE") ? "revestir" : $_POST['TIPO_TAPA'];
         $tipoPiscina        = $_POST['TIPO_PISCINA'];
+        $colorLacado        = $_POST['COLORLACADO'];
 
         $datosPresupuesto = new DatosPresupuesto(
             $modelo,                //S = sumergido C = coronacion
@@ -94,7 +95,8 @@ switch ($tipo) {
             $importeInstalacion,    // En caso de que sea propia
             $datosClienteFinal,     // Datos del cliente
             $tipoTapa,              // ipe o revestir
-            $tipoPiscina            // hormigon, liner o polieste
+            $tipoPiscina,            // hormigon, liner o polieste
+            $colorLacado            // hormigon, liner o polieste
         );
 
         $calcularPresupuesto = calcularYGrabarPresupuesto($datosPresupuesto, $conn);
@@ -371,7 +373,7 @@ function calcularYGrabarPresupuesto($datos, $conn)
                 $descripcionCliente .= " - PROF. PISCINA " . $datos->profundidadPiscina . " cm";
             }
 
-            $descripcionCliente .= " - Laminas de " . $datos->tipoLamina . " " . $datos->colorLamina;
+            $descripcionCliente .= " - Laminas de " . $datos->tipoLamina . " " . $datos->colorLamina . " ";
             $descripcion = "Piscina de " . $datos->anchoPiscina . " x " . $datos->largoPiscina . " con escalera de " . $datos->largoEscalera . " x " . $datos->anchoEscalera;
 
             // S o C
@@ -414,6 +416,9 @@ function calcularYGrabarPresupuesto($datos, $conn)
             } else {
                 $descripcion .= "Instalación propia";
             }
+
+            $soporteLacado = $datos->colorLacado;
+            $descripcionCliente .= "(Soporte en " . $soporteLacado . ")";
 
             $sqlImporte = "SELECT SUM(importe) AS TOTAL FROM LINPRESU WHERE PRESUPUESTO_WEB = '$nuevoCodigo'";
             $mresPrecio = mysqli_query($conn, $sqlImporte);

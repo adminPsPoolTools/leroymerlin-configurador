@@ -1286,6 +1286,74 @@ input:checked + .slider:before {
   object-position: center;
 }
 
+#lacado {
+  --ps-lacado-thumb-width: 92px;
+  --ps-lacado-thumb-height: 68px;
+  --ps-lacado-preview-width: min(100%, 360px);
+  --ps-lacado-preview-height: 240px;
+}
+
+#lacado .lacado-option-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+
+#lacado .collacado {
+  width: 100%;
+  min-height: 138px;
+  margin: 0;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 8px;
+  font-size: 12px;
+  line-height: 1.2;
+  text-align: center;
+  background: #fff;
+  color: var(--lm-ink);
+  border: 1px solid #d8e4c8;
+}
+
+#lacado .collacado:hover {
+  background-color: #edf6df !important;
+  border-color: #bfd69f !important;
+}
+
+#lacado .collacado:active {
+  background-color: #dff0c5 !important;
+}
+
+#lacado .collacado img {
+  width: var(--ps-lacado-thumb-width);
+  height: var(--ps-lacado-thumb-height);
+  object-fit: contain;
+  margin: 0 auto;
+  display: block;
+  flex: 0 0 auto;
+}
+
+#lacado #dibulacado {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 10px;
+}
+
+#lacado #dibulacado > img,
+#lacado #dibulacado .lamina-preview-img {
+  width: var(--ps-lacado-preview-width);
+  height: var(--ps-lacado-preview-height);
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
 #presupuesto,
 #presupuestoPVP {
   float: none;
@@ -1319,6 +1387,7 @@ input:checked + .slider:before {
   #piscina .dibujo,
   #escalera .dibujo,
   #lamina .dibujo,
+  #lacado .dibujo,
   #instalacion .dibujo,
   #cod_cliente .dibujo,
   #precio .dibujo,
@@ -1441,11 +1510,23 @@ input:checked + .slider:before {
     gap: 8px;
   }
 
+  #lacado .lacado-option-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
   #lamina .collamina {
     width: 100%;
     min-height: 78px;
     font-size: 11px;
     padding: 5px 4px;
+  }
+
+  #lacado .collacado {
+    width: 100%;
+    min-height: 124px;
+    font-size: 11px;
+    padding: 8px 6px;
   }
 
   #configurador .switch + .nombrecheck {
@@ -1466,6 +1547,10 @@ input:checked + .slider:before {
   }
 
   #lamina .lamina-material-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #lacado .lacado-option-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 

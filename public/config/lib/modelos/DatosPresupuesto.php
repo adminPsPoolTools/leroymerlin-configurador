@@ -30,6 +30,7 @@ class DatosPresupuesto
     public $datosClienteFinal;
     public $tipoTapa;
     public $tipoPiscina;
+    public $colorLacado;
 
     public function __construct(
         $modelo,
@@ -53,7 +54,8 @@ class DatosPresupuesto
         $importeInstalacion,
         $datosClienteFinal,
         $tipoTapa,
-        $tipoPiscina
+        $tipoPiscina,
+        $colorLacado
     ) {
         $this->modelo               = $modelo;
         $this->subtipo              = $subtipo = strtoupper(trim($subtipo));
@@ -76,6 +78,7 @@ class DatosPresupuesto
         $this->datosClienteFinal    = $datosClienteFinal;
         $this->tipoTapa             = $tipoTapa;
         $this->tipoPiscina          = $tipoPiscina;
+        $this->colorLacado        = $colorLacado;
 
         if ($modelo != "S") // SI LA ESCALERA NO ES SUMERGIDA NO PUEDE TENER NI TAPA, NI VIGA, NI SUBTIPO
         {

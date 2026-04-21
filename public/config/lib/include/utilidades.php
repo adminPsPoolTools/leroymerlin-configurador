@@ -21,9 +21,16 @@ function insertarArticulosFijos($conn, $datos, $nuevoCodigo, &$linea, &$transacc
 
     while ($mrow2 = mysqli_fetch_object($mres)) {
         $precioArticuloFijo = obtenerPVPArticulo($mrow2->CODIGO, $datos->cliente, $mrow2->PRECIO, 1, $conn);
-        $sql = "INSERT INTO LINPRESU (PRESUPUESTO_WEB, LINEA, ARTICULO, CANTIDAD, PVP, PVP_FINAL, DTO, IMPORTE, COMENTARIO)
-                VALUES($nuevoCodigo, $linea, '" . $mrow2->CODIGO . "', 1, " . $precioArticuloFijo['PVP'] . ", " . $precioArticuloFijo['PVP_FINAL'] . ",
-                     " . $precioArticuloFijo['DTO'] . ", " . $precioArticuloFijo['PVP_FINAL'] . ", 'Articulo fijo " . $mrow2->CODIGO . "')";
+
+        if ($mrow2->CODIGO === '26167') {
+            $sql = "INSERT INTO LINPRESU (PRESUPUESTO_WEB, LINEA, ARTICULO, CANTIDAD, PVP, PVP_FINAL, DTO, IMPORTE, COMENTARIO)
+                    VALUES($nuevoCodigo, $linea, '" . $mrow2->CODIGO . "', 1, " . $precioArticuloFijo['PVP'] . ", " . $precioArticuloFijo['PVP_FINAL'] . ",
+                         " . $precioArticuloFijo['DTO'] . ", " . $precioArticuloFijo['PVP_FINAL'] . ", 'SOPORTE LACADO EN: " . $datos->colorLacado . "')";
+        } else {
+            $sql = "INSERT INTO LINPRESU (PRESUPUESTO_WEB, LINEA, ARTICULO, CANTIDAD, PVP, PVP_FINAL, DTO, IMPORTE)
+                    VALUES($nuevoCodigo, $linea, '" . $mrow2->CODIGO . "', 1, " . $precioArticuloFijo['PVP'] . ", " . $precioArticuloFijo['PVP_FINAL'] . ",
+                         " . $precioArticuloFijo['DTO'] . ", " . $precioArticuloFijo['PVP_FINAL'] . ")";
+        }
 
         if (mysqli_query($conn, $sql)) {
             $linea++;
