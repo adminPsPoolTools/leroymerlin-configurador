@@ -37,6 +37,17 @@ function obtenerFacturaPresupuesto($conn, $presupuesto, $datosClienteFinal, $apl
     if (file_exists($logoPath)) {
         $logoBase64 = 'data:image/jpeg;base64,' . base64_encode(file_get_contents($logoPath));
     }
+    // Logo Leroy Merlin en base64 para que funcione en cualquier contexto (ventana nueva, html2pdf, etc.)
+    $logoPath1 = __DIR__ . '/../../../img/brand/recorte_coronacion_1.jpg';
+    $logoBase641 = '';
+    if (file_exists($logoPath1)) {
+        $logoBase641 = 'data:image/jpeg;base64,' . base64_encode(file_get_contents($logoPath1));
+    }
+    $logoPath2 = __DIR__ . '/../../../img/brand/recorte_coronacion_2.jpg';
+    $logoBase642 = '';
+    if (file_exists($logoPath2)) {
+        $logoBase642 = 'data:image/jpeg;base64,' . base64_encode(file_get_contents($logoPath2));
+    }
 
     $html = '<html>
 
@@ -11479,7 +11490,7 @@ function obtenerFacturaPresupuesto($conn, $presupuesto, $datosClienteFinal, $apl
                         <span class="col-12">contacto@leroymerlin.es</span>
                     </div>
                     <div class="mt-2 row no-gutters">
-                        <span class="p-2 text-center border border-dark col-5"><b>P&aacute;gina 1/3</b></span>
+                        <span class="p-2 text-center border border-dark col-5"><b>P&aacute;gina 1/4</b></span>
                     </div>
                 </div>
                 <div class="border col-6 border-top-0 border-right-0 border-bottom-0 border-dark">
@@ -11638,46 +11649,83 @@ function obtenerFacturaPresupuesto($conn, $presupuesto, $datosClienteFinal, $apl
                 <img class="col-3 img-fluid" src="' . $logoBase64 . '">
                 <h3 class="pl-4 text-center col"><span><u><b>CONDICIONES GENERALES</b></u></span></h3>
                 <div class="col-2">
-                    <p class="pl-2 pr-2 text-center border border-dark"><b>P&aacute;gina 2/3</b></p>
+                    <p class="pl-2 pr-2 text-center border border-dark"><b>P&aacute;gina 2/4</b></p>
+                </div>
+            </div>
+            <div class="mt-3 container-fluid">
+                <b>Recorte de la coronación</b>
+                <ul>
+                    <li>En caso de que su piscina disponga de vuelo de coronación, esta característica compromete, el correcto funcionamiento de la cubierta.</li>
+                    <li>Con el objetivo de cumplir con los requeisitos de funcionamiento, el cliente autoriza a que nuestros instaladores realicen un recorte necesario en su coronación</li>
+                    <li>El recorte podrá variar en función de la geometría de la piscina. No obstante, de forma orientativa, se actuará sobre el vuelo de la coronación en la zona del enrollador en aproximadamente 40 cm., pudiendo ajustarse esta medida en función de las caracterísitas de la piscina y la longitud de la cubierta.</li>
+                    <li>Dado que exiten múltiples tipos de coronación (direrentes materiales, espesores y geometrías), el remate final de la coronación no está incluido en nuestros trabajos y deberá ser realizado por el cliente o por terceros, en caso de ser necesario.</li>
+                </ul>
+            
+        <table style="width: 100%; text-align: center;">
+            <tr>
+                <td style="width: 50%; text-align: center; vertical-align: middle;">
+                    <img src="' . $logoBase641 . '" 
+                        style="height: 400px; width: 400px; object-fit: contain;">
+                </td>
+                <td style="width: 50%; text-align: center; vertical-align: middle;">
+                    <img src="' . $logoBase642 . '" 
+                        style="height: 500px; width: 300px; object-fit: contain;">
+                </td>
+            </tr>
+        </table>
+
+            </div>
+            <div class="h-auto text-center w-100 col align-content-stretch">
+                <b>Aceptaci&oacute;n de presupuesto n&ordm; ' . $codigoPresupuesto . ' y Condiciones Generales:</b><br><br>
+                <div class="mt-1 ml-auto mr-auto border border-dark w-25" style="height:100px;"></div>
+            </div>
+        </div>
+        <div class="html2pdf__page-break"></div>
+        
+        <!-- PAGINA 3 - CONDICIONES GENERALES -->
+        <div class="h-100 pages d-flex flex-column">
+            <div class="row no-gutters align-items-center">
+                <img class="col-3 img-fluid" src="' . $logoBase64 . '">
+                <h3 class="pl-4 text-center col"><span><u><b>CONDICIONES GENERALES</b></u></span></h3>
+                <div class="col-2">
+                    <p class="pl-2 pr-2 text-center border border-dark"><b>P&aacute;gina 3/4</b></p>
                 </div>
             </div>
             <div class="mt-3 container-fluid">
                 <b>GARANT&Iacute;AS</b>
                 <ul>
-                    <li>Motor y cuadro el&eacute;ctrico: 2 a&ntilde;os</li>
+                    <li>Motor y cuadro el&eacute;ctrico: 3 a&ntilde;os</li>
                     <li>Lama de PVC opacas: 2 a&ntilde;os</li>
-                    <li>Lamas de Policarbonato: 3 a&ntilde;os</li>
+                    <li>Lamas de Policarbonato: 2 a&ntilde;os</li>
                 </ul>
-                La garant&iacute;a <b>incluye:</b>
+                <p>La garant&iacute;a <b>incluye:</b></p>
                 <ul class="listaGuiones">
                     <li>Esta garant&iacute;a cubre, en general, cualquier defecto de fabricaci&oacute;n.</li>
                     <li>Cubre todo el equipo el&eacute;ctrico (motores, buen funcionamiento de los finales de carrera y cuadro), con la condici&oacute;n expresa de que el cableado entre el cuadro y el motor haya sido instalado de acuerdo con las instrucciones proporcionadas.</li>
                     <li>La garant&iacute;a se har&aacute; efectiva &uacute;nicamente cuando las piezas hayan sido devueltas para su examen y se determine que se trata de un defecto de fabricaci&oacute;n.</li>
                     <li>La garant&iacute;a est&aacute; limitada a la sustituci&oacute;n de las piezas defectuosas y no incluye gastos de desmontaje y montaje, ni da&ntilde;os y perjuicios.</li>
                 </ul>
-                La garant&iacute;a <b>no incluye:</b>
+                <p>La garant&iacute;a <b>no incluye:</b></p>
                 <ul class="listaGuiones">
                     <li>Deterioros debidos al transporte.</li>
-                    <li>Montajes o instalaciones defectuosas o no conformes con el manual de instalaci&oacute;n.</li>
                     <li>Modificaciones del material sin consentimiento del fabricante.</li>
-                    <li>Error de conexi&oacute;n o de tensi&oacute;n.</li>
-                    <li>Desgastes debidos a una mala instalaci&oacute;n del eje.</li>
-                    <li>Desgastes del motor y cuadro provocados por no respetar las reglas de conexi&oacute;n.</li>
-                    <li>Da&ntilde;os debidos a tormentas el&eacute;ctricas.</li>
+                    <li>Manipulación en la conexi&oacute;n batería.</li>
+                    <li>Manipulación de la batería.</li>
+                    <li>Desgastes debidos a la manipulación del eje.</li>
+                    <li>Desgastes del motor y cuadro provocados por manipular las conexiones.</li>
+                    <li>Da&ntilde;os debidos a efectos meteorol&oacute;gicos adversos.</li>
                 </ul>
                 <b>RECOMENDACIONES</b>
                 <ul class="listaGuiones">
                     <li>Cuando la cubierta est&aacute; cerrada es recomendable poner peri&oacute;dicamente en funcionamiento la filtraci&oacute;n.</li>
-                    <li>No dejar nunca las lamas al aire libre sin protecci&oacute;n o sin que est&eacute;n en contacto con el agua.</li>
+                    <li>No abrir nunca la cubierta con la piscina vacía.</li>
                     <li>No caminar nunca sobre la cubierta.</li>
                     <li>Eliminar de la superficie de la cubierta las hojas y otros residuos.</li>
-                    <li>Es recomendable instalar una toma de tierra.</li>
                 </ul>
                 <b>ACLARACIONES:</b>
                 <ul class="listaGuiones">
                     <li>La cubierta se calcula con forma rectangular. Los recortes se presupuestar&aacute;n aparte.</li>
-                    <li>Es necesario dejar instalado un tubo corrugado o tubo flexible empotrado a la altura del eje del enrollador.</li>
-                    <li>La cubierta tendr&aacute; de anchura 3cm. menos con respecto al ancho de la piscina.</li>
+                    <li>La cubierta tendr&aacute; de anchura 3-4cm. menos con respecto al ancho más pequeño de la piscina.</li>
                     <li>Se incluye mando a distancia.</li>
                     <li>El cuadro el&eacute;ctrico presenta un interruptor de 3 posiciones para utilizar en caso de p&eacute;rdida del mando.</li>
                     <li>La instalaci&oacute;n de la cubierta no est&aacute; incluida en el precio. Consultar presupuesto y disponibilidad.</li>
@@ -11690,13 +11738,14 @@ function obtenerFacturaPresupuesto($conn, $presupuesto, $datosClienteFinal, $apl
             </div>
         </div>
         <div class="html2pdf__page-break"></div>
-        <!-- PAGINA 3 - CONDICIONES GENERALES -->
+
+        <!-- PAGINA 4 - CONDICIONES GENERALES -->
         <div class="h-100 pages d-flex flex-column">
             <div class="row no-gutters align-items-center">
                 <img class="col-3 img-fluid" src="' . $logoBase64 . '">
                 <h3 class="pl-4 text-center col"><span><u><b>CONDICIONES GENERALES</b></u></span></h3>
                 <div class="col-2">
-                    <p class="pl-2 pr-2 text-center border border-dark"><b>P&aacute;gina 3/3</b></p>
+                    <p class="pl-2 pr-2 text-center border border-dark"><b>P&aacute;gina 4/4</b></p>
                 </div>
             </div>
             <div class="mt-3 container-fluid">
